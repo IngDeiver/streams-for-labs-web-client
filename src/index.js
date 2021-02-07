@@ -2,15 +2,19 @@ import React from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-import {getHomeAccountId} from './util/auth'
+// Bootstrap styles
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+// Bootstrap scripts
+import 'bootstrap/dist/js/bootstrap.min.js';
 
 // Router
 import { BrowserRouter as Router, Switch, Route, } from "react-router-dom";
 
 // Pages 
+import App from "./App";
 import Login from './pages/login'
 
 ReactDOM.render(
