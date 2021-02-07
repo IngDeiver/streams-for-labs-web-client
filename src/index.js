@@ -5,27 +5,70 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
 // Router
-import { BrowserRouter as Router, Switch, Route, } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect, } from "react-router-dom";
 
 // Pages 
 import App from "./App";
 import Login from './pages/login'
 
+// Auth utils
+import { getHomeAccountId } from './util/auth'
+
+// Denied access if not exists a sesion
+const PrivateRoute = ({ children, ...rest }) => {
+  let auth = getHomeAccountId()
+  return (
+    <Route
+      {...rest}
+      render={() =>
+        auth ? (
+          children
+        ) : (
+          <Redirect
+            to="/login"
+          />
+        )
+      }
+    />
+  );
+}
+
+// Avoid show login when user is authenticated
+const ProtectedLoginRoute= ({ children, ...rest }) => {
+  let auth = getHomeAccountId()
+  return (
+    <Route
+      {...rest}
+      render={() =>
+        !auth ? (
+          children
+        ) : (
+          <Redirect
+            to="/"
+          />
+        )
+      }
+    />
+  );
+}
+
+// Routes
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Switch>
-        <Route exact path="/">
+        <PrivateRoute exact path="/">
           <App />
-        </Route>
-        <Route exact path="/login">
+        </PrivateRoute>
+        <ProtectedLoginRoute exact path="/login">
           <Login />
-        </Route>
+        </ProtectedLoginRoute>
       </Switch>
     </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

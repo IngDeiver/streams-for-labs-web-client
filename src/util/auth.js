@@ -3,9 +3,8 @@ import * as msal from "@azure/msal-browser";
 // Oauth2 cofig
 const msalConfig = {
   auth: {
-    clientId: "4ffd1ea7-1b1d-4ad6-96d5-916315128e56",
-    authority:
-      "https://login.microsoftonline.com/618bab0f-20a4-4de3-a10c-e20cee96bb35",
+    clientId: process.env.REACT_APP_AZURE_CLEINT_ID,
+    authority:process.env.REACT_APP_AZURE_AUTHORITY,
   },
   cache: {
     cacheLocation: "localStorage",
@@ -20,10 +19,12 @@ export const msalInstance = new msal.PublicClientApplication(msalConfig);
 
 // If homeAccountId is null not exist a sesión
 export const getHomeAccountId = () => {
-  return msalInstance.getAllAccounts()[0].homeAccountId;
+  const accounts = msalInstance.getAllAccounts()
+  if(accounts.length > 0) return accounts[0].homeAccountId;
+  return null
 };
 
-// Get current sesión
+// Get current account
 export const getAccountByHomeAccountId = () => {
   return msalInstance.getAccountByHomeId(getHomeAccountId());
 };
@@ -31,7 +32,7 @@ export const getAccountByHomeAccountId = () => {
  // Logout
  export const logout = async () => {
   const currentAccount = await getAccountByHomeAccountId();
-  msalInstance.logout({ account: currentAccount });
+  msalInstance.logout({ account: currentAccount })
 };
 
   // Verify and refresh acces token when expired

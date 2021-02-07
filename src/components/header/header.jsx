@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import react from "react";
 import { BrowserRouter as Router, Link } from "react-router-dom";
+import { logout } from "../../util/auth";
 
 const Header = (props) => {
   return (
@@ -51,9 +52,7 @@ const Header = (props) => {
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
-                    <Link className="dropdown-item" to="/login">
-                      Logout
-                    </Link>
+                    <button onClick={logout} className="dropdown-item" >Logout</button>
                   </li>
                   <li>
                     <a className="dropdown-item" href="#">

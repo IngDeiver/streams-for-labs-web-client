@@ -11,7 +11,7 @@ const WithMessage = (Component) => {
     render() {
       return (
         <>
-          <Component showMessage={this.showMessage} />
+          <Component showMessage={this.showMessage} {...this.props}/>
           <ToastContainer
             position="top-right"
             autoClose={5000}

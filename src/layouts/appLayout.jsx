@@ -16,7 +16,7 @@ const WithAppLayout = (Content) => {
                     {/* Header */}
                     <Header/>
                     {/* Content */}
-                    <Content showMessage={ showMessage }/>
+                    <Content showMessage={ showMessage } {...this.props}/>
                 </>
             )
         }

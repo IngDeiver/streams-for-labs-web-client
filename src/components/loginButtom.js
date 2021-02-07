@@ -1,17 +1,20 @@
 import react from "react";
+import { useHistory } from "react-router";
 import WithMessage from "../hocs/withMessage";
-import {msalInstance, logout, scopes} from '../util/auth'
+import {msalInstance, scopes} from '../util/auth'
 
 
 // Buttom for login with office
-const LoginButtom = (props) => {
-  const {showMessage} = props
+const LoginButtom = ({showMessage, disabled}) => {
+
+  const history = useHistory()
 
   // Login user with UPB credentials
   const login = async () => {
     try {
       const acces_token = await msalInstance.loginPopup({scopes});
       console.log(acces_token)
+      history.replace("/login")
       showMessage("Welcome")
     } catch (err) {
       showMessage("Error al iniciar sesión", "error")
@@ -20,8 +23,7 @@ const LoginButtom = (props) => {
 
   return (
     <>
-      <button onClick={login}>Login with office</button>
-      <button onClick={logout}>Logout with office</button>
+      <button disabled={disabled} onClick={login}>Login with office</button>
     </>
   );
 };
