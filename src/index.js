@@ -4,12 +4,6 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
-// Bootstrap styles
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-// Bootstrap scripts
-import 'bootstrap/dist/js/bootstrap.min.js';
-
 // Router
 import { BrowserRouter as Router, Switch, Route, } from "react-router-dom";
 

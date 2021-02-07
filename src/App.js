@@ -1,5 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
+import WithAppLayout from './layouts/appLayout'
+import WithMessage from './hocs/withMessage';
 
 function App() {
   return (
@@ -22,4 +24,4 @@ function App() {
   );
 }
 
-export default App;
+export default WithMessage(WithAppLayout(App));

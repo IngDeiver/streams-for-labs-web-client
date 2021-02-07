@@ -4,8 +4,6 @@ import WithMessage from '../hocs/withMessage'
 
 // Login page
 const Login = (props) => {
-    const {showMessage} = props
-
     return (
         <>
             <LoginButtom/>

@@ -10,7 +10,8 @@ const LoginButtom = (props) => {
   // Login user with UPB credentials
   const login = async () => {
     try {
-      await msalInstance.loginPopup({scopes});
+      const acces_token = await msalInstance.loginPopup({scopes});
+      console.log(acces_token)
       showMessage("Welcome")
     } catch (err) {
       showMessage("Error al iniciar sesión", "error")
@@ -20,7 +21,7 @@ const LoginButtom = (props) => {
   return (
     <>
       <button onClick={login}>Login with office</button>
-      {/* <button onClick={logout}>Logout with office</button> */}
+      <button onClick={logout}>Logout with office</button>
     </>
   );
 };
