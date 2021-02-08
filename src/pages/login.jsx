@@ -1,7 +1,8 @@
 import react, { useState } from "react";
-import LoginButtom from "../components/loginButtom";
+import AzureLoginButtom from "../components/azureLoginButtom";
 import WithMessage from "../hocs/withMessage";
 import ReCAPTCHA from "react-google-recaptcha";
+import AdminLoginButtom from '../components/adminLoginButtom'
 
 // Login page
 const Login = (props) => {
@@ -13,10 +14,12 @@ const Login = (props) => {
   
   return (
     <>
-      <LoginButtom disabled={isHuman ? false : true}/>
+      <AzureLoginButtom disabled={isHuman ? false : true}/>
+      <AdminLoginButtom disabled={isHuman ? false : true}/>
       <ReCAPTCHA
         sitekey={process.env.REACT_APP_CAPTCHA_SITE_KEY}
         onChange={onChange}
+        onExpired={() => setIsHuman(false)}
       />
     </>
   );

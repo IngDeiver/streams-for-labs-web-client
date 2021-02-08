@@ -54,11 +54,6 @@ const Header = (props) => {
                   <li>
                     <button onClick={logout} className="dropdown-item" >Logout</button>
                   </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Admin
-                    </a>
-                  </li>
                 </ul>
               </li>
             </ul>

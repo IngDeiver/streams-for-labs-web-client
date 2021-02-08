@@ -4,68 +4,11 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
-// Router
-import { BrowserRouter as Router, Switch, Route, Redirect, } from "react-router-dom";
-
-// Pages 
 import App from "./App";
-import Login from './pages/login'
 
-// Auth utils
-import { getHomeAccountId } from './util/auth'
 
-// Denied access if not exists a sesion
-const PrivateRoute = ({ children, ...rest }) => {
-  let auth = getHomeAccountId()
-  return (
-    <Route
-      {...rest}
-      render={() =>
-        auth ? (
-          children
-        ) : (
-          <Redirect
-            to="/login"
-          />
-        )
-      }
-    />
-  );
-}
-
-// Avoid show login when user is authenticated
-const ProtectedLoginRoute= ({ children, ...rest }) => {
-  let auth = getHomeAccountId()
-  return (
-    <Route
-      {...rest}
-      render={() =>
-        !auth ? (
-          children
-        ) : (
-          <Redirect
-            to="/"
-          />
-        )
-      }
-    />
-  );
-}
-
-// Routes
 ReactDOM.render(
-  <React.StrictMode>
-    <Router>
-      <Switch>
-        <PrivateRoute exact path="/">
-          <App />
-        </PrivateRoute>
-        <ProtectedLoginRoute exact path="/login">
-          <Login />
-        </ProtectedLoginRoute>
-      </Switch>
-    </Router>
-  </React.StrictMode>,
+  <App/>,
   document.getElementById("root")
 );
 
