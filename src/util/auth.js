@@ -22,7 +22,7 @@ export const msalInstance = new msal.PublicClientApplication(msalConfig);
 /*If homeAccountId is null not exist a sesión of azure
   if not exist a sesion in local storage for admin, not exist admin sesion
   if not there are any sesion, not there is a user authenticated
-  And return role of user authenticated
+  Return the role (user or admin) with the token (for will use in Athorization header) of user authenticated
 */
 export const getLocalSesion =  () => {
  return new Promise(async (resolve, reject) => {
@@ -35,18 +35,17 @@ export const getLocalSesion =  () => {
   // get sesion for azure
   const accounts = msalInstance.getAllAccounts()
   if(accounts.length > 0) {
-    sesion.token = accounts[0].homeAccountId;
+    const { idToken } = await checkAzureToken()
+    sesion.token = idToken
     return resolve(sesion)
   }
 
   // get local sesion for admin
   const adminSesion = await getAdminSesion();
-  console.log("adminSesion ->", adminSesion);
   if(!adminSesion) return resolve(null)
 
   //then verify admin sesion
   const admin_token = adminSesion["acces_token"]
-  console.log("admin_token ->", admin_token);
   if(!verifyAdminToken(admin_token)) return reject(null)
   sesion.token = admin_token
   sesion.role ="ADMIN"
@@ -54,9 +53,11 @@ export const getLocalSesion =  () => {
  })
 };
 
-// Get current account with azure
-export const getAccountByHomeAccountId = () => {
-  return msalInstance.getAccountByHomeId(getLocalSesion());
+// Get current object account with azure
+export const getAccountByHomeAccountId = async () => {
+  const accounts = msalInstance.getAllAccounts()
+  const homeIde = accounts[0].homeAccountId;
+  return msalInstance.getAccountByHomeId(homeIde);
 };
 
  // Logout

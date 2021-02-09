@@ -1,9 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import react from "react";
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import react, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { AuthConext } from "../../context/AuthProvider";
 import { logout } from "../../util/auth";
 
 const Header = (props) => {
+  // Get username from auth context 
+  const context = useContext(AuthConext)
+  const { username } = context[2]
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -40,19 +45,24 @@ const Header = (props) => {
                 </Link>
               </li>
               <li className="nav-item dropdown ml-auto">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
+                <button
+                  className="btn dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  Username
-                </a>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  {username}
+                </button>
+                <ul
+                  className="dropdown-menu"
+                  aria-labelledby="dropdownMenuButton"
+                >
                   <li>
-                    <button onClick={logout} className="dropdown-item" >Logout</button>
+                    <button onClick={logout} className="dropdown-item">
+                      Logout
+                    </button>
                   </li>
                 </ul>
               </li>
