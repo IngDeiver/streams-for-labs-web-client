@@ -18,6 +18,7 @@ import Login from "./pages/login";
 import Admin from "./pages/admin";
 import Files from "./pages/files";
 import LoginAdmin from './pages/loginAdmin'
+import NotFoundPage from './pages/404'
 
 // Auth utils
 import { getLocalSesion } from "./util/auth";
@@ -174,6 +175,12 @@ function App({ showMessage }) {
             >
               <LoginAdmin />
             </ProtectedAccessAdminLoginRoute>
+
+            <Route exact path="/404">
+              <NotFoundPage/>
+            </Route>
+
+            <Redirect to="/404" />
           </Switch>
         </Router>
       </React.StrictMode>

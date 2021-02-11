@@ -1,13 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import react, { useContext } from "react";
+import react from "react";
 import { Link } from "react-router-dom";
 import { AuthConext } from "../../context/AuthProvider";
 import { logout } from "../../util/auth";
 
 const Header = (props) => {
-  // Get username from auth context 
-  const context = useContext(AuthConext)
-  const { username } = context[2]
 
   return (
     <div>
@@ -44,28 +41,12 @@ const Header = (props) => {
                   Videos
                 </Link>
               </li>
-              <li className="nav-item dropdown ml-auto">
-                <button
-                  className="btn dropdown-toggle"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {username}
-                </button>
-                <ul
-                  className="dropdown-menu"
-                  aria-labelledby="dropdownMenuButton"
-                >
-                  <li>
-                    <button onClick={logout} className="dropdown-item">
-                      Logout
-                    </button>
-                  </li>
-                </ul>
+              <li  className="nav-item">
+                <a className="btn" onClick={logout} >
+                        Logout
+                      </a>
               </li>
+             
             </ul>
           </div>
         </div>
