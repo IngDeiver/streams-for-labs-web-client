@@ -1,20 +1,17 @@
 import react, { useState } from "react";
-import AzureLoginButtom from "../components/azureLoginButtom";
-import WithMessage from "../hocs/withMessage";
+import AdminLoginButtom from "../components/adminLoginButtom";
 import ReCAPTCHA from "react-google-recaptcha";
 
-
-// Login page
-const Login = (props) => {
+const LoginAdmin = () => {
   const [isHuman, setIsHuman] = useState(false);
 
   const onChange = (value) => {
     if (value) setIsHuman(true);
   };
-  
+
   return (
     <>
-      <AzureLoginButtom disabled={isHuman ? false : true}/>
+      <AdminLoginButtom disabled={isHuman ? false : true} />
       <ReCAPTCHA
         sitekey={process.env.REACT_APP_CAPTCHA_SITE_KEY}
         onChange={onChange}
@@ -24,4 +21,4 @@ const Login = (props) => {
   );
 };
 
-export default WithMessage(Login);
+export default LoginAdmin;

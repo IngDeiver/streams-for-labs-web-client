@@ -1,5 +1,4 @@
 import react, { useState } from "react";
-import { Redirect } from "react-router";
 import WithMessage from "../hocs/withMessage";
 import * as AdminApiService from '../services/adminApiService'
 import { setAdminSesion }  from '../util/auth'
@@ -13,7 +12,7 @@ const AdminLoginButtom = ({ disabled, showMessage}) => {
     AdminApiService.login(username, password)
     .then(user =>{
         setAdminSesion(user.data)
-        window.location.replace("/administration");
+        window.location.replace("/admin");
     })
     .catch(() => showMessage("Error al iniciar sesión", "error"))
   };
@@ -26,7 +25,7 @@ const AdminLoginButtom = ({ disabled, showMessage}) => {
         data-toggle="modal"
         data-target="#exampleModal"
       >
-        Login like admin
+        Login
       </button>
 
       <div

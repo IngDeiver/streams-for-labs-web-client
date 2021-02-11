@@ -17,6 +17,7 @@ import {
 import Login from "./pages/login";
 import Admin from "./pages/admin";
 import Files from "./pages/files";
+import LoginAdmin from './pages/loginAdmin'
 
 // Auth utils
 import { getLocalSesion } from "./util/auth";
@@ -31,7 +32,10 @@ const PrivateRoute = ({ children, sesion, loadingSesion, ...rest }) => {
 
   // If not exist  sesion
   if (!sesion && !loadingSesion)
-    return <Route {...rest} render={() => <Redirect to="/login" />} />;
+    return <Route {...rest} render={({ location }) => {
+      if(location.pathname === "/admin") return <Redirect to="/admin/login" />
+      else return <Redirect to="/login" />
+    }} />;
 
   /* Avoid user enter into admin page
      and avoid admin enter into user pages
@@ -40,21 +44,21 @@ const PrivateRoute = ({ children, sesion, loadingSesion, ...rest }) => {
     <Route
       {...rest}
       render={({ location }) => {
-        if (location.pathname === "/administration" && sesion.role !== "ADMIN")
+        if (location.pathname === "/admin" && sesion.role !== "ADMIN")
           return <Redirect to="/login" />;
         else if (
-          location.pathname !== "/administration" &&
+          location.pathname !== "/admin" &&
           sesion.role === "ADMIN"
         )
-          return <Redirect to="/login" />;
+          return <Redirect to="/admin/login" />;
         else return children;
       }}
     />
   );
 };
 
-// Denied load login page when exist a sesion
-const ProtectedAccessLoginRoute = ({
+// Denied load user login page when exist a sesion
+const ProtectedAccessUserLoginRoute = ({
   children,
   sesion,
   loadingSesion,
@@ -63,13 +67,13 @@ const ProtectedAccessLoginRoute = ({
   // Loading sesion
   if (loadingSesion) return <Route {...rest} render={() => <Loading />} />;
 
-  // If  exist  sesion redict to initial page
+  // If  exist  sesion redict to initial user page
   if (sesion)
     return (
       <Route
         {...rest}
         render={() => {
-          if (sesion.role === "ADMIN") return <Redirect to="/administration" />;
+          if (sesion.role === "ADMIN") return <Redirect to="/admin" />;
           else return <Redirect to="/" />;
         }}
       />
@@ -77,6 +81,32 @@ const ProtectedAccessLoginRoute = ({
   else if (!sesion && !loadingSesion)
     return <Route {...rest} render={() => children} />;
 };
+
+// Denied load user login page when exist a sesion
+const ProtectedAccessAdminLoginRoute = ({
+  children,
+  sesion,
+  loadingSesion,
+  ...rest
+}) => {
+  // Loading sesion
+  if (loadingSesion) return <Route {...rest} render={() => <Loading />} />;
+
+  // If  exist  sesion redict to initial admin page
+  if (sesion)
+    return (
+      <Route
+        {...rest}
+        render={() => {
+          if (sesion.role === "USER") return <Redirect to="/" />;
+          else return <Redirect to="/admin" />;
+        }}
+      />
+    );
+  else if (!sesion && !loadingSesion)
+    return <Route {...rest} render={() => children} />;
+};
+
 
 function App({ showMessage }) {
   // Get context
@@ -122,19 +152,28 @@ function App({ showMessage }) {
               sesion={sesion}
               loadingSesion={loadingSesion}
               exact
-              path="/administration"
+              path="/admin"
             >
               <Admin />
             </PrivateRoute>
 
-            <ProtectedAccessLoginRoute
+            <ProtectedAccessUserLoginRoute
               sesion={sesion}
               loadingSesion={loadingSesion}
               exact
               path="/login"
             >
               <Login />
-            </ProtectedAccessLoginRoute>
+            </ProtectedAccessUserLoginRoute>
+
+            <ProtectedAccessAdminLoginRoute
+              sesion={sesion}
+              loadingSesion={loadingSesion}
+              exact
+              path="/admin/login"
+            >
+              <LoginAdmin />
+            </ProtectedAccessAdminLoginRoute>
           </Switch>
         </Router>
       </React.StrictMode>
