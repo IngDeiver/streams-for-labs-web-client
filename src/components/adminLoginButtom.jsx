@@ -1,25 +1,25 @@
 import react, { useState } from "react";
 import WithMessage from "../hocs/withMessage";
-import * as AdminApiService from '../services/adminApiService'
-import { setAdminSesion }  from '../util/auth'
+import * as AdminApiService from "../services/adminApiService";
+import { setAdminSesion } from "../util/auth";
 
-
-const AdminLoginButtom = ({ disabled, showMessage}) => {
+const AdminLoginButtom = ({ disabled, showMessage }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const login = () => {
     AdminApiService.login(username, password)
-    .then(user =>{
-        setAdminSesion(user.data)
+      .then((user) => {
+        setAdminSesion(user.data);
         window.location.replace("/admin");
-    })
-    .catch(() => showMessage("Error al iniciar sesión", "error"))
+      })
+      .catch(() => showMessage("Error al iniciar sesión", "error"));
   };
 
   return (
     <>
       <button
+      className="btn btn-primary"
         disabled={disabled}
         type="button"
         data-toggle="modal"
@@ -56,13 +56,13 @@ const AdminLoginButtom = ({ disabled, showMessage}) => {
                   type="text"
                   placeholder="Username"
                   className="form-control my-2"
-                  onChange={e => setUsername(e.target.value)}
+                  onChange={(e) => setUsername(e.target.value)}
                 ></input>
                 <input
                   type="password"
                   placeholder="Password"
                   className="form-control"
-                  onChange={e => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                 ></input>
               </div>
             </div>
@@ -74,7 +74,12 @@ const AdminLoginButtom = ({ disabled, showMessage}) => {
               >
                 Cancel
               </button>
-              <button disabled={username === "" || password === ""} type="button" className="btn btn-primary" onClick={login}>
+              <button
+                disabled={username === "" || password === ""}
+                type="button"
+                className="btn btn-primary"
+                onClick={login}
+              >
                 Login
               </button>
             </div>

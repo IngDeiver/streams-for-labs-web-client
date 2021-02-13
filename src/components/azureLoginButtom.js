@@ -20,7 +20,16 @@ const LoginButtom = ({showMessage, disabled}) => {
 
   return (
     <>
-      <button disabled={disabled} onClick={login}>Login with office</button>
+      <button className="btn btn-default" 
+      disabled={disabled} 
+      onClick={login}
+      style={{backgroundColor:"#eb2f06"}}>
+        <img src="/office365.png" width="32" height="33" 
+        alt="Office 365 logo"
+          className="mx-2"
+        />
+        <span className="text-white">Login with office</span>
+      </button>
     </>
   );
 };
