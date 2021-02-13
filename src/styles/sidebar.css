@@ -1,0 +1,14 @@
+a {
+    text-decoration: none;
+    color: black;
+}
+.sidebar {
+    width:150px;
+    height:   calc(100vh - 62px);
+    /* border-right: gray solid 1px; */
+}
+.active {
+    -webkit-box-shadow: inset 0px -1px 13px -5px rgba(153,153,153,1);
+    -moz-box-shadow: inset 0px -1px 13px -5px rgba(153,153,153,1);
+    box-shadow: inset 0px -1px 13px -5px rgba(153,153,153,1);
+}

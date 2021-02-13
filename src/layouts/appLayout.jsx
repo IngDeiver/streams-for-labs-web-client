@@ -1,7 +1,9 @@
 import react from  'react'
+import './appLayout.css'
 
 // Components 
-import Header from '../components/header/header'
+import Header from '../components/header'
+import Sidebar from '../components/sidebar'
 
 const WithAppLayout = (Content) => {
 
@@ -9,15 +11,18 @@ const WithAppLayout = (Content) => {
         
         render (){ 
             const { showMessage } = this.props
-            showMessage("Porfa seguir el layot definido, es para que todas las paginas tengan la misma estructura")
 
             return (
-                <>
+                <div className="layout">
                     {/* Header */}
-                    <Header/>
+                    <div className="header"> <Header/> </div>
+                    {/* Sidebar */}
+                    <div className="sidebar"> <Sidebar/> </div>
                     {/* Content */}
-                    <Content showMessage={ showMessage } {...this.props}/>
-                </>
+                    <div className="content mx-2 my-2"> 
+                        <Content showMessage={ showMessage } {...this.props}/> 
+                    </div>
+                </div>
             )
         }
     }

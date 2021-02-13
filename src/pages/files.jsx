@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/files.css'
 import WithMessage from '../hocs/withMessage';
 import WithAppLayout from '../layouts/appLayout'
 

@@ -19,6 +19,10 @@ import Admin from "./pages/admin";
 import Files from "./pages/files";
 import LoginAdmin from './pages/loginAdmin'
 import NotFoundPage from './pages/404'
+import Photos from './pages/photos'
+import Videos from './pages/videos'
+import Shared from './pages/shared'
+import Syncronization from './pages/sync'
 
 // Auth utils
 import { getLocalSesion } from "./util/auth";
@@ -147,6 +151,42 @@ function App({ showMessage }) {
               path="/"
             >
               <Files />
+            </PrivateRoute>
+
+            <PrivateRoute
+              sesion={sesion}
+              loadingSesion={loadingSesion}
+              exact
+              path="/photos"
+            >
+              <Photos />
+            </PrivateRoute>
+
+            <PrivateRoute
+              sesion={sesion}
+              loadingSesion={loadingSesion}
+              exact
+              path="/videos"
+            >
+              <Videos />
+            </PrivateRoute>
+
+            <PrivateRoute
+              sesion={sesion}
+              loadingSesion={loadingSesion}
+              exact
+              path="/syncronization"
+            >
+              <Syncronization />
+            </PrivateRoute>
+
+            <PrivateRoute
+              sesion={sesion}
+              loadingSesion={loadingSesion}
+              exact
+              path="/shared"
+            >
+              <Shared />
             </PrivateRoute>
 
             <PrivateRoute

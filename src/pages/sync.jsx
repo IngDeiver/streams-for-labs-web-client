@@ -1,15 +1,15 @@
 import React from 'react';
-import '../styles/videos.css'
+import '../styles/sync.css'
 
 import WithMessage from '../hocs/withMessage';
 import WithAppLayout from '../layouts/appLayout'
 
-const Videos = () => {
+const Sync = () => {
     return (
         <>
-            Videos page is work!
+            Sync page is work!
         </>
     )
 }
 
-export default WithMessage(WithAppLayout(Videos))
+export default WithMessage(WithAppLayout(Sync))

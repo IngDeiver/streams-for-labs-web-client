@@ -1,15 +1,15 @@
 import React from 'react';
-import '../styles/videos.css'
+import '../styles/shared.css'
 
 import WithMessage from '../hocs/withMessage';
 import WithAppLayout from '../layouts/appLayout'
 
-const Videos = () => {
+const Shared = () => {
     return (
         <>
-            Videos page is work!
+            Shared page is work!
         </>
     )
 }
 
-export default WithMessage(WithAppLayout(Videos))
+export default WithMessage(WithAppLayout(Shared))
