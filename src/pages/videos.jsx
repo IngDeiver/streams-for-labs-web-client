@@ -4,7 +4,7 @@ import '../styles/videos.css'
 import WithMessage from '../hocs/withMessage';
 import WithAppLayout from '../layouts/appLayout'
 
-const Videos = () => {
+const Videos = ({ showMessage }) => {
     return (
         <>
             Videos page is work!
