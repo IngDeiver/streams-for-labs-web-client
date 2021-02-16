@@ -75,7 +75,7 @@ const AdminLoginButtom = ({ disabled, showMessage }) => {
                 Cancel
               </button>
               <button
-                disabled={username === "" || password === ""}
+                disabled={username === "" || password === "" || disabled}
                 type="button"
                 className="btn btn-primary"
                 onClick={login}
