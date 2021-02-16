@@ -13,6 +13,8 @@ import {
   Redirect,
 } from "react-router-dom";
 
+// Policy 
+import Policy from './components/policy'
 // Pages
 import Login from "./pages/login";
 import Admin from "./pages/admin";
@@ -142,6 +144,7 @@ function App({ showMessage }) {
 
   return (
       <React.StrictMode>
+        <Policy/>
         <Router>
           <Switch>
             <PrivateRoute

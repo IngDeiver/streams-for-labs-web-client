@@ -6,6 +6,12 @@ import reportWebVitals from "./reportWebVitals";
 import App from "./App";
 import { AuthProvider } from "./context/AuthProvider";
 
+// Bootstrap dependecies
+import  'jquery';
+import  'popper.js';
+import  'bootstrap/dist/js/bootstrap.bundle.min';
+import  'bootstrap/dist/css/bootstrap.min.css';
+
 ReactDOM.render(
   <AuthProvider>
     <App/>

@@ -15,7 +15,7 @@ const LoginAdmin = () => {
         <div className="border mx-5">
           <div className="d-flex flex-column align-items-center">
             <i
-              class="fas fa-database mt-5"
+              className="fas fa-database mt-5"
               style={{ color: "#48dbfb", fontSize: 150 }}
             ></i>
             <h1>Streams For</h1>
