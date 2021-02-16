@@ -10,15 +10,15 @@ const Header = (props) => {
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <button className="btn btn-outline-secondary" onClick={logout}>
-              <i class="fas fa-sign-out-alt"></i> Logout
+              <i className="fas fa-sign-out-alt"></i> Logout
               </button>
             </li>
           </ul>
         </div>
         <div>
-          <div class="d-flex flex-row">
+          <div className="d-flex flex-row">
           <a className="navbar-brand" href="/">
-            <i class="fas fa-database" style={{color: "#48dbfb", fontSize: 30}}></i>
+            <i className="fas fa-database" style={{color: "#48dbfb", fontSize: 30}}></i>
           </a>
           <span >
             <h5 className="pt-2">Streams for lab</h5>
