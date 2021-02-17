@@ -45,20 +45,20 @@ const AdminPage = ({ showMessage }) => {
             <div className="alert alert-primary" role="alert">
             Configure available storage for user use.
             <br/>
-            Max value accept: {config.max}
+            Max value accept: {config.max} GB
             <br/>
-            Min value accept: {config.min}
+            Min value accept: {config.min} GB
             <br/>
-            Assigned: {config.default}
+            Assigned: {config.default} GB
         </div>}
         <label className="mr-2">
           Storage value{" "}
         </label>
         <input
           className="form-control"
-          min={3}
+          min={loadingConfig ? 0 : config.min}
           type="number"
-          max={8}
+          max={loadingConfig ? 0 : config.max}
           value={assigned}
           onChange={(e) => setAssigned(parseInt(e.target.value))}
         />
