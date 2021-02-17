@@ -8,6 +8,11 @@ const Header = (props) => {
       <div className="container-fluid d-flex flex-row-reverse">
         <div>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li className="nav-item mr-2">
+              <button className="btn btn-outline-success" onClick={() => alert("Uplaod function")}>
+              <i class="fas fa-file-upload"></i> Upload
+              </button>
+            </li>
             <li className="nav-item">
               <button className="btn btn-outline-secondary" onClick={logout}>
               <i className="fas fa-sign-out-alt"></i> Logout

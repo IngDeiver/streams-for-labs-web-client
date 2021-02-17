@@ -1,6 +1,10 @@
 a {
     text-decoration: none;
     color: black;
+
+}
+a:hover, :visited{
+    color: initial;
 }
 .sidebar {
     width:150px;
