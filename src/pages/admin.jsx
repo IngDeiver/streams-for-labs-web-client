@@ -32,7 +32,7 @@ const AdminPage = ({ showMessage }) => {
 
   return (
     <>
-      <Header />
+      <Header noIsAdminSection= {false} />
       <div className="container">
         <h1 className="text-center text-muted mb-3 mt-5">
           <i className="fas fa-user-cog"></i> Settings
