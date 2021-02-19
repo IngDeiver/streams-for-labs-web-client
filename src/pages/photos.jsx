@@ -1,13 +1,16 @@
-import React from 'react';
-import '../styles/photos.css'
+import React from "react";
+import "../styles/photos.css";
 
-import WithMessage from '../hocs/withMessage';
-import WithAppLayout from '../layouts/appLayout';
+import WithMessage from "../hocs/withMessage";
+import WithAppLayout from "../layouts/appLayout";
 import { ReactPhotoCollage } from "react-photo-collage";
 
 const setting = {
   width: "100%",
-  height: ["535px", "400px"],
+  height: [
+    window.screen.height * (0.4).toString() + "px",
+    window.screen.height * (0.2).toString() + "px",
+  ],
   layout: [2, 4],
   photos: [
     {
@@ -42,10 +45,11 @@ const setting = {
   showNumOfRemainingPhotos: true,
 };
 const Photos = () => {
+  console.log(window.innerHeight);
   return (
     <div className="d-flex flex-row justify-content-center align-items-center h-100">
-        <ReactPhotoCollage {...setting} />
+      <ReactPhotoCollage {...setting} />
     </div>
   );
-    }
-export default WithMessage(WithAppLayout(Photos))
+};
+export default WithMessage(WithAppLayout(Photos));
