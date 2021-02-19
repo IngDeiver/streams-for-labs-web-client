@@ -4,14 +4,14 @@ import { logout } from "../util/auth";
 
 const Header = ({ noIsAdminSection = true }) => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
       <div className="container-fluid d-flex flex-row-reverse">
         <div>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             {noIsAdminSection && 
               <li className="nav-item mr-2">
               <button className="btn btn-outline-success" onClick={() => alert("Uplaod function")}>
-              <i class="fas fa-file-upload"></i> Upload
+              <i className="fas fa-file-upload"></i> Upload
               </button>
             </li>}
             <li className="nav-item">

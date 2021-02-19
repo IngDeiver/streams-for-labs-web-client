@@ -6,10 +6,12 @@ a {
 a:hover, :visited{
     color: initial;
 }
+section {
+    width:145px;
+    height: calc(100vh - 62px);
+}
 .sidebar {
-    width:150px;
-    height:   calc(100vh - 62px);
-    /* border-right: gray solid 1px; */
+    position:fixed;
 }
 .active {
     -webkit-box-shadow: inset 0px -1px 13px -5px rgba(153,153,153,1);

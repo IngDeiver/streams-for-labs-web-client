@@ -30,7 +30,7 @@ import Syncronization from './pages/sync'
 import { getLocalSesion } from "./util/auth";
 
 // SHow when sesion is loading
-const Loading = () => <div>Loading...</div>;
+const Loading = () => <div className="fixed-top">Loading...</div>;
 
 // Denied access if not exists a sesion as user
 const PrivateRoute = ({ children, sesion, loadingSesion, ...rest }) => {

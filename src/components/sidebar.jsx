@@ -4,7 +4,7 @@ import '../styles/sidebar.css'
 
 const Sidebar = () => {
   return (
-    <section className=" bg-light shadow-sm border">
+    <section className="bg-light shadow-sm border">
           <div className="sidebar d-flex flex-column">
           <NavLink exact to="/" className="p-2 border">
           <i className="far fa-folder-open"></i> Files
