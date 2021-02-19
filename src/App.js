@@ -222,11 +222,11 @@ function App({ showMessage }) {
 
             <Route exact path="/404">
               <NotFoundPage/>
-            </Route>
+            </Route> 
 
             <Redirect to="/404" />
           </Switch>
-        </Router>
+        </Router> 
       </React.StrictMode>
   );
 }
