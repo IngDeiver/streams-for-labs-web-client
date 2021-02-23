@@ -1,70 +1,25 @@
-# Getting Started with Create React App
+<h1 align="center">Streams for lab 👋</h1>
+<p>
+  <a href="#" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+  </a>
+</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Streams for lab es un proyecto integrador de la facultad de ing. de ssitemas, propuesto por la facultad para desarrollar durante el semestre, e cual consta de lo siguiente:
+Como iniciativa en la solución al manejo de recursos compartidos en pequeñas empresas o el hogar se propone desarrollar un sistema distribuido de administración de recursos compartidos como se muestra en la Figura 1. Entre ellos archivos, fotos y video desde una interfaz unificada. Se propone que el sistema permita sincronizar datos de celular o directorios de un equipo de escritorio, en una copia de seguridad. También ofrezca la capacidad de compartir archivos. Si los archivos son imágenes o video el sistema ofrecería la capacidad de organizar y presentar las imágenes. Por ejemplo, la aplicación “Fotos” de Google. Además, el sistema tendría un servidor streaming para compartir y reproducir video.
 
-## Available Scripts
+# Secciones de la aplicación web
+## Login
+![Login](https://firebasestorage.googleapis.com/v0/b/files-service.appspot.com/o/images%2Flogin.png?alt=media&token=9a4a1c88-e001-4d15-9fab-e8ac6d8d1bdd)
+![Admin Login](https://firebasestorage.googleapis.com/v0/b/files-service.appspot.com/o/images%2FLogin%20admin.png?alt=media&token=06f93f06-91c6-4171-84f2-fcbfcbcaa3e1)
+## Files
+![Files](https://firebasestorage.googleapis.com/v0/b/files-service.appspot.com/o/images%2Ffiles.png?alt=media&token=ce3fda2c-2ec8-48d7-84b4-f91daab9604d)
+## Photos
+![Photos](https://firebasestorage.googleapis.com/v0/b/files-service.appspot.com/o/images%2FPhotos.png?alt=media&token=a61f7073-e485-4f1e-be7b-7ffbc815f782)
+## Videos
+![Videos](https://firebasestorage.googleapis.com/v0/b/files-service.appspot.com/o/images%2FVideos.png?alt=media&token=984be8d4-0c86-41df-b842-0e05cf4ff29f)
+## Shared
+![Shared](https://firebasestorage.googleapis.com/v0/b/files-service.appspot.com/o/images%2FShared.png?alt=media&token=db4d3bf2-a49a-48f5-ae17-7f379b66b792)
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Administration
+![Administration](https://firebasestorage.googleapis.com/v0/b/files-service.appspot.com/o/images%2Fadminiustration.png?alt=media&token=2d8594ad-03d5-4038-9849-889e991c5855)
