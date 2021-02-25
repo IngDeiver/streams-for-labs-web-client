@@ -4,6 +4,9 @@ import { logout } from "../util/auth";
 import "../styles/header.css";
 import { upload } from "../services/fileApiService";
 import withMessage from "../hocs/withMessage";
+import { getConfig } from "../services/adminApiService";
+import { getFiles } from "../services/fileApiService";
+const GB = 1000000000; //numero de bytes que tiene 1GB
 
 const Header = ({ noIsAdminSection = true, showMessage }) => {
   const [uploading, setUploading] = useState(false);
@@ -17,20 +20,77 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
     setProgress(`${percentCompleted}%`);
   };
 
+  const getMaxStorage = () => {
+    return new Promise((resolve, reject) => {
+      // getConfig()
+      //   // Get max user storage (GB)
+      //   .then((res) => {
+      //     const maxStorage = res.data[0].max
+      //     console.log("Max: ", maxStorage);
+      //     resolve(maxStorage)
+      //   })
+      //   .catch(err => reject(err));
+      resolve(5);
+    });
+  };
+
+  const getUserStorageUsed = () => {
+    return new Promise((resolve, reject) => {
+      getFiles()
+        // Cuenta el espacio ocupado por el usuario
+        .then((res) => {
+            const weights = res.data.map(file => file.weight)
+            const storageUsed = weights.reduce((a, b) => a + b) / GB;
+            resolve(storageUsed);
+        })
+        .catch((err) => reject(err));
+    });
+  };
+
+  const verifyStorage = (fileSize) => {
+    return new Promise((resolve, reject) => {
+      Promise.all([getMaxStorage(), getUserStorageUsed()])
+        .then((results) => {
+          const maxSize = results[0];
+          const userStorageUsed = results[1];
+          const newSizeToStorage = fileSize / GB;
+          if (userStorageUsed + newSizeToStorage > maxSize) {
+            showMessage(`Storage exceeded, you have available: ${maxSize - userStorageUsed }GB`,"error");
+            resolve(false);
+            setUploading(false);
+          } else {
+            resolve(true);
+          }
+        })
+        .catch((err) => reject(err));
+    }).catch((err) => showMessage(err.message, "error"));
+  };
+
   const handleFile = (e) => {
     const file = e.target.files[0];
     if (file) {
       setProgress("0%");
       setUploading(true);
 
-      const formData = new FormData();
-      formData.append("file", file);
-      console.log(formData);
-      upload(formData, onUploadProgress)
-        .then((res) => {
-          console.log(res);
-          setUploading(false);
-          showMessage("File uploaded!");
+      // if have storage upload the file
+      verifyStorage(file.size)
+        .then((haveStorage) => {
+          if (haveStorage) {
+            const formData = new FormData();
+            formData.append("file", file);
+            console.log(formData);
+            upload(formData, onUploadProgress)
+              .then((res) => {
+                console.log(res);
+                setUploading(false);
+                showMessage("File uploaded!");
+              })
+              .catch((err) => {
+                console.log(err);
+                setUploading(false);
+                showMessage(err.message, "error");
+              });
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -57,10 +117,9 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
                     className="inputfile"
                   />
                   {uploading ? (
-                    <span>{progress}</span>
+                    <p className="mt-2 mr-2">{progress}</p>
                   ) : (
                     <label for="file">
-                      {" "}
                       <i className="fas fa-file-upload"></i> Upload
                     </label>
                   )}
