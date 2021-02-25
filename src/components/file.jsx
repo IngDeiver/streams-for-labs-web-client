@@ -5,13 +5,16 @@ import Spinner from './spinner'
 
 const File = ({loading = true, files = [], isSharedSection = false, onDownload, onShared, onSelectedFile}) => {
   
-  const getSize = (bytes) => {
-    // Megabytes
+  const calSize = (bytes) => {
+    
     const GB = 1000000000 //numero de bytes que tiene 1GB
+    const MG = 1048576 //numero de bytes que tiene 1MG
+
+    // Megabytes
     if(bytes <=GB ){
-      return `${bytes} MB`
+      return `${(bytes/MG).toFixed(2)} MB`
     }else{ // Gigabytes
-      return `${bytes/GB} GB`
+      return `${(bytes/GB).toFixed(2)} GB`
     }
   }
 
@@ -44,7 +47,7 @@ const File = ({loading = true, files = [], isSharedSection = false, onDownload, 
             <i className="far fa-folder"></i> {file.name.length > 25 ? file.name.substring(0,25) + "...": file.name}
           </div>
           <div onClick={() => onSelectedFile(file)} className="col-2 my-2">{formatDate(file.upload_at)}</div>
-          <div onClick={() => onSelectedFile(file)} className="col-2 my-2">{getSize(file.weight)}</div>
+          <div onClick={() => onSelectedFile(file)} className="col-2 my-2">{calSize(file.weight)}</div>
           {isSharedSection && 
           <div onClick={() => onSelectedFile(file)} 
             className="col-3 my-2"> 
