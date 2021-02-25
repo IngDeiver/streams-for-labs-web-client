@@ -66,13 +66,13 @@ const File = ({loading = true, files = [], isSharedSection = false, onDownload, 
                   <i style={{fontSize:20}} className="fas fa-chevron-circle-down dropdown show ml-auto"></i>
                 </button>
                 <div className="dropdown-menu">
-                  <a href={file.path}  className="dropdown-item" download>
+                  <a href={`http://localhost:4000/api/file/${file._id}`}  className="dropdown-item" download>
                     <i className="fas fa-cloud-download-alt"></i> Download
                   </a>
                   {!isSharedSection && 
-                    <a className="dropdown-item" href="#" onClick={() => onShared(file)}>
+                    <button className="dropdown-item btn btn-link"  onClick={() => onShared(file)}>
                     <i className="fas fa-share-alt"></i> Share
-                  </a>}
+                  </button>}
                 </div>
               </div>
             </div>
