@@ -55,6 +55,7 @@ const Videos = () => {
       <h4 className="my-1 text-center mx-2">{video.name}</h4>
       <p className="text-muted text-center">Play list</p>
       <FileComponent
+        loading={false}
         files={fakerVideos}
         onDownload={handleDownload}
         onShared={handleShared}

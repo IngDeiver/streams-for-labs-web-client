@@ -35,7 +35,9 @@ const Shared = () => {
   
   return (
     <>
-      <FileComponent isSharedSection files={fakerFiles} 
+      <FileComponent 
+      loading={false}
+      isSharedSection files={fakerFiles} 
       onDownload={handleDownload} 
       onShared={handleShared}
       onSelectedFile={handleSelecFile}/>
