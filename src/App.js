@@ -125,7 +125,6 @@ function App({ showMessage }) {
     getLocalSesion()
       .then( async (auth) => {
         setSesion(auth);
-        console.log("LOCAL SESION -> ", auth);
         // if exist a user authenticate set to context
         if(auth){
           if(auth.role === "ADMIN") {
