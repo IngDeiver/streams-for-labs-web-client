@@ -22,6 +22,7 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
     if (file) {
       setProgress("0%");
       setUploading(true);
+      console.log(file.name);
 
       const formData = new FormData();
       formData.append("file", file);
@@ -57,10 +58,9 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
                     className="inputfile"
                   />
                   {uploading ? (
-                    <span>{progress}</span>
+                    <p className="mt-2 mr-2">{progress}</p>
                   ) : (
                     <label for="file">
-                      {" "}
                       <i className="fas fa-file-upload"></i> Upload
                     </label>
                   )}

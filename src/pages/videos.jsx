@@ -7,40 +7,25 @@ import FileComponent from "../components/file";
 import { useState } from "react";
 
 const Videos = () => {
-  const fakerVideos = [
-    {
-      name: "A video file #1",
-      date: "14/07/2021",
-      from: "Pepito Peréz",
-      size: "10MB",
-      path:
-        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-    },
-    {
-      name: "A video file #2",
-      date: "14/07/2021",
-      from: "Juan Peréz",
-      size: "1GB",
-      path:
-        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-    },
-    {
-      name: "A video file #3",
-      date: "03/05/2021",
-      from: "Carlos Peréz",
-      size: "8MB",
-      path:
-        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-    },
-    {
-      name: "A video file #4",
-      date: "21/2/2020",
-      from: "Karol Peréz",
-      size: "2MB",
-      path:
-        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    },
-  ];
+  
+
+  const  fakerVideos = [{_id: "60371bda41ae1b7e6526d746",
+     author: "Pepito Pérez",
+    name: "login.png",
+    path:  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    shared_users:[],
+    upload_at: "2021-02-25T03:39:06.955Z",
+    weight: 23094
+    }, {
+      _id: "60371d7e41ae1b7e6526d747",
+       author: "Pepito Pérez",
+      name: "login.png",
+      path:  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", 
+      shared_users:[],
+      upload_at: "2021-02-25T03:39:06.955Z",
+      weight: 23094
+    }]
+    
 
   const [video, setVideo] = useState(fakerVideos[0]);
 

@@ -1,16 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/files.css'
 import WithMessage from '../hocs/withMessage';
 import WithAppLayout from '../layouts/appLayout'
 import FileComponent from "../components/file";
+import { getFiles } from '../services/fileApiService'
 
-const Files = () => {
-    const  fakerFiles = [{name: "Archivo #1", date:"14/02/2021", size: "10MB"},
-    {name: "Archivo #2", date:"14/02/2021",  size: "100MB"},
-    {name: "Archivo #3", date:"14/02/2021",  size: "150MB"},
-    {name: "Archivo #4", date:"14/02/2021",  size: "300MB"},
-    {name: "Archivo #5", date:"17/02/2021",  size: "900MB"}]
-    
+const Files = ({ showMessage }) => {
+
+    const [files, setFiles] = useState([])
+    const [loadingFiles, setLoadingFiles] = useState(true)
+
+    const listFiles = () => {
+      getFiles()
+      .then((res) => {
+        console.log(res.data);
+        setLoadingFiles(false);
+        setFiles(res.data)
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoadingFiles(false);
+        showMessage(err.message, "error");
+      });
+    }
+
+    useEffect(()=> {
+      listFiles()
+    }, [])
+
+   
     const handleDownload = (fileToDownload) => {
         alert("Download: " + fileToDownload.name)
     };
@@ -25,7 +43,9 @@ const Files = () => {
     
     return (
       <>
-        <FileComponent  files={fakerFiles} 
+        <FileComponent  
+        loading = {loadingFiles}
+        files={files} 
         onDownload={handleDownload} 
         onShared={handleShared}
         onSelectedFile={handleSelecFile}/>
