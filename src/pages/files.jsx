@@ -30,7 +30,7 @@ const Files = ({ showMessage }) => {
 
    
     const handleDownload = (fileToDownload) => {
-        alert("Download: " + fileToDownload.name)
+        alert("Download: " + fileToDownload._id)
     };
     const handleShared = (fileToShare) => {
       alert("Share: " + fileToShare.name)

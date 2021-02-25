@@ -2,8 +2,10 @@ import React from "react";
 import "../styles/fileComponent.css";
 import moment from 'moment'
 import Spinner from './spinner'
+import {download } from '../services/fileApiService'
+import WithMessage from '../hocs/withMessage'
 
-const File = ({loading = true, files = [], isSharedSection = false, onDownload, onShared, onSelectedFile}) => {
+const File = ({loading = true, files = [], isSharedSection = false, onShared, onSelectedFile, showMessage}) => {
   
   const calSize = (bytes) => {
     
@@ -23,6 +25,22 @@ const File = ({loading = true, files = [], isSharedSection = false, onDownload, 
     const upload_at = moment(date).format(format);
     return moment(upload_at, format).fromNow();
   }
+
+  const onDownload = (file) => {
+    download(file._id)
+    .then(res =>{
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', file.name);
+      document.body.appendChild(link);
+      link.click();
+      console.log(res)
+      showMessage("File downloaded!")
+    })
+    .catch(err => showMessage(err.message, "error"))
+  }
+
   return (
     <div className="container-fluid">
       <div className="row border py-2 mx-3">
@@ -66,13 +84,13 @@ const File = ({loading = true, files = [], isSharedSection = false, onDownload, 
                   <i style={{fontSize:20}} className="fas fa-chevron-circle-down dropdown show ml-auto"></i>
                 </button>
                 <div className="dropdown-menu">
-                  <a href={file.path}  className="dropdown-item" download>
+                  <button  onClick={()=> onDownload(file)}  className="dropdown-item  btn btn-link">
                     <i className="fas fa-cloud-download-alt"></i> Download
-                  </a>
+                  </button>
                   {!isSharedSection && 
-                    <a className="dropdown-item" href="#" onClick={() => onShared(file)}>
+                    <button className="dropdown-item btn btn-link"  onClick={() => onShared(file)}>
                     <i className="fas fa-share-alt"></i> Share
-                  </a>}
+                  </button>}
                 </div>
               </div>
             </div>
@@ -92,4 +110,4 @@ const File = ({loading = true, files = [], isSharedSection = false, onDownload, 
   );
 };
 
-export default File;
+export default WithMessage(File);
