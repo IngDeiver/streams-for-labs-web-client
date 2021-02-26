@@ -40,7 +40,8 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
         // Cuenta el espacio ocupado por el usuario
         .then((res) => {
             const weights = res.data.map(file => file.weight)
-            const storageUsed = weights.reduce((a, b) => a + b) / GB;
+            let storageUsed = 0
+            if(weights.length > 0) storageUsed = weights.reduce((a, b) => a + b) / GB;
             resolve(storageUsed);
         })
         .catch((err) => reject(err));

@@ -29,13 +29,13 @@ const File = ({loading = true, files = [], isSharedSection = false, onShared, on
   const onDownload = (file) => {
     download(file._id)
     .then(res =>{
-      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const blob = res.data
+      console.log(blob)
+      const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', file.name);
-      document.body.appendChild(link);
       link.click();
-      console.log(res)
       showMessage("File downloaded!")
     })
     .catch(err => showMessage(err.message, "error"))
