@@ -1,24 +1,29 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import react, { useState } from "react";
+import react, { useContext, useState } from "react";
 import { logout } from "../util/auth";
 import "../styles/header.css";
 import { upload } from "../services/fileApiService";
 import withMessage from "../hocs/withMessage";
 import { getConfig } from "../services/adminApiService";
 import { getFiles } from "../services/fileApiService";
+import { AppContext } from '../context/AppProvider'
 const GB = 1000000000; //numero de bytes que tiene 1GB
+
 
 const Header = ({ noIsAdminSection = true, showMessage }) => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState("0%");
+  const context = useContext(AppContext)
+  const selectingFilesToRemove = context[4]
+  const setSelectingFilesToRemove = context[5]
 
   const onUploadProgress = (progressEvent) => {
     const percentCompleted = Math.round(
       (progressEvent.loaded * 100) / progressEvent.total
     );
-    console.log(percentCompleted);
     setProgress(`${percentCompleted}%`);
   };
+
 
   const getMaxStorage = () => {
     return new Promise((resolve, reject) => {
@@ -106,6 +111,20 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
       <div className="container-fluid d-flex flex-row-reverse">
         <div>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            {selectingFilesToRemove &&
+              <>
+                <li className="nav-item mr-2">
+                  <button className="btn btn-outline-danger btn-sm mt-1" onClick={logout}>
+                  <i className="far fa-trash-alt"></i> Remove
+                  </button>
+                </li>
+                <li className="nav-item mr-2">
+                  <button className="btn btn-outline-secondary btn-sm mt-1" onClick={() =>setSelectingFilesToRemove(false)}>
+                   Cancel
+                  </button>
+              </li>
+              </>
+            }
             {noIsAdminSection && (
               <li className="nav-item mr-2">
                 <form>
@@ -114,15 +133,18 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
                     onChange={handleFile}
                     name="file"
                     type="file"
-                    id="file"
                     className="inputfile"
                   />
                   {uploading ? (
                     <p className="mt-2 mr-2">{progress}</p>
                   ) : (
-                    <label for="file">
-                      <i className="fas fa-file-upload"></i> Upload
-                    </label>
+                    <>
+                      { !selectingFilesToRemove && 
+                        <label >
+                          <i className="fas fa-file-upload"></i> Upload
+                        </label>
+                      }
+                    </>
                   )}
                 </form>
               </li>

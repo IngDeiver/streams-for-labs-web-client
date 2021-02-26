@@ -1,7 +1,7 @@
 import WithMessage from "./hocs/withMessage";
 import React, { useEffect, useContext } from "react";
 import { useState } from "react";
-import { AuthConext } from "./context/AuthProvider";
+import { AppContext } from "./context/AppProvider";
 import jwt from 'jsonwebtoken'
 import { getAccountByHomeAccountId } from './util/auth'
 
@@ -117,7 +117,7 @@ const ProtectedAccessAdminLoginRoute = ({
 
 function App({ showMessage }) {
   // Get context
-  const [sesion, setSesion, _, setUser] = useContext(AuthConext);
+  const [sesion, setSesion, setUser] = useContext(AppContext);
   const [loadingSesion, setLoadingSesion] = useState(true);
 
   useEffect(() => {

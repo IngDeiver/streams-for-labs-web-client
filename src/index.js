@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import App from "./App";
-import { AuthProvider } from "./context/AuthProvider";
+import { AppProvider } from "./context/AppProvider";
 
 // Bootstrap dependecies
 import  'jquery';
@@ -13,9 +13,9 @@ import  'bootstrap/dist/js/bootstrap.bundle.min';
 import  'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
-  <AuthProvider>
+  <AppProvider>
     <App/>
-  </AuthProvider>,
+  </AppProvider>,
   document.getElementById("root")
 );
 
