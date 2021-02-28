@@ -133,6 +133,7 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
                     onChange={handleFile}
                     name="file"
                     type="file"
+                    id="file"
                     className="inputfile"
                   />
                   {uploading ? (
@@ -140,7 +141,7 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
                   ) : (
                     <>
                       { !selectingFilesToRemove && 
-                        <label >
+                        <label for="file">
                           <i className="fas fa-file-upload"></i> Upload
                         </label>
                       }

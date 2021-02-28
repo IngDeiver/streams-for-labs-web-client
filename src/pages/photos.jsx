@@ -1,54 +1,106 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/photos.css";
-
+import ImageGallery from "react-image-gallery";
 import WithMessage from "../hocs/withMessage";
 import WithAppLayout from "../layouts/appLayout";
-import { ReactPhotoCollage } from "react-photo-collage";
 
-const setting = {
-  width: "100%",
-  height: [
-    window.screen.height * (0.4).toString() + "px",
-    window.screen.height * (0.2).toString() + "px",
-  ],
-  layout: [2, 4],
-  photos: [
+
+const Photos = ({ showMessage }) => {
+  const [currentImage, setCurrentImage] = useState({});
+  const [countImagesLoadedInCarrousel, setCount] = useState(0)
+
+  // This array should sorted! default by date!
+  const [images, setImages] = useState([
     {
-      src:
-        "https://images.unsplash.com/photo-1517088455889-bfa75135412c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=e5548929376f93d8b1b7a21097df03bd&auto=format&fit=crop&w=749&q=80",
+      _id: "60371bda41ae1b7e6526d746",
+      author: "Pepito Pérez",
+      name: "Example image 1.png",
+      path: "https://picsum.photos/id/1018/1000/600/",
+      shared_users: [],
+      upload_at: "2021-02-25T03:39:06.955Z",
+      weight: 23094,
     },
     {
-      src:
-        "https://images.unsplash.com/photo-1526656892012-7b336603ed46?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=31c8e58b58c25dfcc18452ed29b52951&auto=format&fit=crop&w=334&q=80",
+      _id: "60371bda41ae1b7e6526d746",
+      author: "Pepito Pérez",
+      name: "Example image 2.png",
+      path: "https://picsum.photos/id/1015/1000/600/",
+      shared_users: [],
+      upload_at: "2021-02-25T03:39:06.955Z",
+      weight: 23094,
     },
     {
-      src:
-        "https://images.unsplash.com/photo-1521024221340-efe7d7fa239b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=9ad8a99d809d3fa3a9e8dff3ecc81878&auto=format&fit=crop&w=750&q=80",
+      _id: "60371bda41ae1b7e6526d746",
+      author: "Pepito Pérez",
+      name: "Example image 3.png",
+      path: "https://picsum.photos/id/1019/1000/600/",
+      shared_users: [],
+      upload_at: "2021-02-25T03:39:06.955Z",
+      weight: 23094,
     },
     {
-      src:
-        "https://images.unsplash.com/photo-1523038793606-2fd28f837a85?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=919b76f4229e41416653aeb10e84e94a&auto=format&fit=crop&w=334&q=80",
+      _id: "60371bda41ae1b7e6526d746",
+      author: "Pepito Pérez",
+      name: "Esta imagen falla porque esta es en mi pc",
+      path: "http://localhost:5000/api/photo/603bda662a3ffd370138c8bb/603a7276f310b3ae89a22b8a",
+      shared_users: [],
+      upload_at: "2021-02-25T03:39:06.955Z",
+      weight: 23094,
     },
-    {
-      src:
-        "https://images.unsplash.com/photo-1516832970803-325be7a92aa5?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=93d7ac9abad6167aecb49ebd67fd5b6d&auto=format&fit=crop&w=751&q=80",
-    },
-    {
-      src:
-        "https://images.unsplash.com/photo-1526938972776-11558ad4de30?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=973795a277e861265b0fabbf4a96afe2&auto=format&fit=crop&w=750&q=80",
-    },
-    {
-      src:
-        "https://images.unsplash.com/photo-1464550838636-1a3496df938b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f22dbf6c13ea7c21e803aa721437b691&auto=format&fit=crop&w=888&q=80",
-    },
-  ],
-  showNumOfRemainingPhotos: true,
-};
-const Photos = () => {
-  console.log(window.innerHeight);
+  ]);
+
+  const onSlide = (index) => {
+    console.log("onSlide: ", index);
+    setCurrentImage(images[index]);
+  };
+
+
+  const onImageLoad = (e) => {
+    setCount(countImagesLoadedInCarrousel+1)
+  }
+  
+  const onChangeSort = (e) => {
+    const typeSort =  e.target.value
+    console.log("onChangeSort:",typeSort);
+  }
+
+  useEffect(() => {
+    setCurrentImage(images[0]);
+  }, [images]);
+
   return (
-    <div className="d-flex flex-row justify-content-center align-items-center h-100">
-      <ReactPhotoCollage {...setting} />
+    <div>
+      <div className="d-flex flex-row justify-content-center my-2">
+        <select className="custom-select custom-select-sm w-50"
+        onChange={onChangeSort}>
+          <option selected>Select a sort</option>
+          <option value="date">By date</option>
+          <option value="name">By name</option>
+        </select>
+        <button type="button" className="btn btn-outline-danger btn-sm mx-2">
+          Remove
+        </button>
+        <button type="button" className="btn btn-outline-info btn-sm">
+          Download
+        </button>
+      </div>
+      <div style={{position:'relative'}} className="d-flex flex-row justify-content-center">
+        <ImageGallery
+          items={images.map((img) => ({
+            original: img.path,
+            thumbnail: img.path
+          }))}
+          onSlide={onSlide}
+          onBeforeSlide={onSlide}
+          onImageLoad={onImageLoad}
+          thumbnailPosition="left"
+          lazyLoad={true}
+          autoPlay
+        />
+        <h4 style={{position:'absolute', top:10}} className="text-bold text-center">
+          {currentImage.name?.toUpperCase()}
+        </h4>
+      </div>
     </div>
   );
 };
