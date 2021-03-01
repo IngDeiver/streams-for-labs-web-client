@@ -4,9 +4,9 @@ import { logout } from "../util/auth";
 import "../styles/header.css";
 import { upload } from "../services/fileApiService";
 import withMessage from "../hocs/withMessage";
-import { getConfig } from "../services/adminApiService";
+import { getMaxStorageAvailable } from "../services/fileApiService";
 import { removeFiles } from '../services/fileApiService'
-import { getFiles } from "../services/fileApiService";
+import { getStorageUsed } from "../services/fileApiService";
 import { AppContext } from '../context/AppProvider'
 const GB = 1000000000; //numero de bytes que tiene 1GB
 
@@ -41,27 +41,25 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
 
   const getMaxStorage = () => {
     return new Promise((resolve, reject) => {
-      // getConfig()
-      //   // Get max user storage (GB)
-      //   .then((res) => {
-      //     const maxStorage = res.data[0].max
-      //     console.log("Max: ", maxStorage);
-      //     resolve(maxStorage)
-      //   })
-      //   .catch(err => reject(err));
+      getMaxStorageAvailable()
+        // Get max user storage (GB)
+        .then((res) => {
+          const maxStorage = res.data.maxStoraged
+          console.log("Max: ", maxStorage);
+          resolve(maxStorage)
+        })
+        .catch(err => reject(err));
       resolve(5);
     });
   };
 
   const getUserStorageUsed = () => {
     return new Promise((resolve, reject) => {
-      getFiles()
-        // Cuenta el espacio ocupado por el usuario
+      getStorageUsed()
+        // Obtiene el espacio de alamacenamiento ocupado por el usuario
         .then((res) => {
-            const weights = res.data.map(file => file.weight)
-            let storageUsed = 0
-            if(weights.length > 0) storageUsed = weights.reduce((a, b) => a + b) / GB;
-            resolve(storageUsed);
+          console.log("storageUsed: ", res.data.storageUsed);
+            resolve(res.data.storageUsed / GB);
         })
         .catch((err) => reject(err));
     });
