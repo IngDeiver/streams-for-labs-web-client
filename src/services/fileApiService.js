@@ -6,7 +6,7 @@ const multipartHeader = {
 }
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:3000/api",
+    baseURL: process.env.REACT_APP_GATEWAY_URI
 });
 
 export const upload = async (formData, onUploadProgress) => {
@@ -29,4 +29,12 @@ export const getFiles = async () => {
     const { token } = await  getLocalSesion();
     return axiosInstance.get('/file', 
     { headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }})
+}
+
+export const removeFiles = async (files, isVideo=false) => {
+    const { token } = await  getLocalSesion();
+    return axiosInstance.delete(`${isVideo ? '/video': '/file'}`,
+    { data: {files},
+      headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }
+    })
 }

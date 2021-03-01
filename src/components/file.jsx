@@ -14,15 +14,17 @@ const File = ({
   onSelectedFile,
   showMessage,
 }) => {
-  const [filesToRemove, SetFilesToRemove ] = useState([])
+  
   const context = useContext(AppContext)
   const selectingFilesToRemove = context[4]
   const setSelectingFilesToRemove = context[5]
+  const filesToRemove = context[6]
+  const SetFilesToRemove = context[7]
 
   useEffect(() => {
     // Remove files from lis to remove
     if(!selectingFilesToRemove){
-     SetFilesToRemove([])
+     SetFilesToRemove({ areVideos:false, data:[] })
      const checkboxes = document.getElementsByClassName("form-check-input")
      for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = false
@@ -68,20 +70,20 @@ const File = ({
 
   const handleCheckFile = (e, file) => {
     const checked = e.target.checked
-    const currentFilesToremove = filesToRemove
+    const currentFilesToremove = filesToRemove.data
     
     // Ad file to remove list
     if(checked){
-      currentFilesToremove.push(file)
-      SetFilesToRemove(currentFilesToremove)
+      currentFilesToremove.push(file._id)
+      SetFilesToRemove({ areVideos:file.path.includes("videos"), data: currentFilesToremove})
       setSelectingFilesToRemove(true)
     }else{// Remove file from remove list
       currentFilesToremove.splice(currentFilesToremove.indexOf(file), 1)
-      SetFilesToRemove(currentFilesToremove)
+      SetFilesToRemove({ areVideos:file.path.includes("videos"), data: currentFilesToremove})
     }
 
     // if check is 0 cancel remove action
-    if(filesToRemove.length === 0) setSelectingFilesToRemove(false)
+    if(filesToRemove.data.length === 0) setSelectingFilesToRemove(false)
   }
 
   return (
@@ -108,11 +110,12 @@ const File = ({
             <div
               className={`my-2 col-${isSharedSection ? "3" : "5"} form-check`}
             >
-              <input
-                onChange={(e) => handleCheckFile(e, file._id)}
+              {!isSharedSection && 
+                <input
+                onChange={(e) => handleCheckFile(e, file)}
                 className="form-check-input"
                 type="checkbox"
-              />
+              />}
               <label className="form-check-label" >
               <i className="far fa-folder mx-2"></i>
                 {file.name.length > 25

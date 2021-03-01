@@ -1,32 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import '../styles/files.css'
 import WithMessage from '../hocs/withMessage';
 import WithAppLayout from '../layouts/appLayout'
 import FileComponent from "../components/file";
 import { getFiles } from '../services/fileApiService'
+import { AppContext } from '../context/AppProvider';
 
 const Files = ({ showMessage }) => {
 
     const [files, setFiles] = useState([])
     const [loadingFiles, setLoadingFiles] = useState(true)
+    const context = useContext(AppContext)
+    const reloadFiles = context[8]
+    const setReloadFiles = context[9]
 
     const listFiles = () => {
       getFiles()
       .then((res) => {
-        console.log(res.data);
         setLoadingFiles(false);
         setFiles(res.data)
+        setReloadFiles(false)
       })
       .catch((err) => {
         console.log(err);
         setLoadingFiles(false);
         showMessage(err.message, "error");
+        setReloadFiles(false)
       });
     }
 
     useEffect(()=> {
       listFiles()
-    }, [])
+    }, [reloadFiles])
 
    
     const handleDownload = (fileToDownload) => {

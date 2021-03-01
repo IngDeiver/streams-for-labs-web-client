@@ -5,6 +5,7 @@ import "../styles/header.css";
 import { upload } from "../services/fileApiService";
 import withMessage from "../hocs/withMessage";
 import { getConfig } from "../services/adminApiService";
+import { removeFiles } from '../services/fileApiService'
 import { getFiles } from "../services/fileApiService";
 import { AppContext } from '../context/AppProvider'
 const GB = 1000000000; //numero de bytes que tiene 1GB
@@ -16,7 +17,10 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
   const context = useContext(AppContext)
   const selectingFilesToRemove = context[4]
   const setSelectingFilesToRemove = context[5]
+  const filesToRemove = context[6]
+  const setReloadFiles = context[9]
 
+  
   const onUploadProgress = (progressEvent) => {
     const percentCompleted = Math.round(
       (progressEvent.loaded * 100) / progressEvent.total
@@ -24,6 +28,16 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
     setProgress(`${percentCompleted}%`);
   };
 
+  const onRemove = () => {
+    console.log("Borrar->", filesToRemove);
+    removeFiles(filesToRemove.data, filesToRemove.areVideos)
+    .then(() => {
+      showMessage("Files removed!")
+      setSelectingFilesToRemove(false)
+      setReloadFiles(true)
+    })
+    .catch(err => showMessage(err.message, "error"))
+  }
 
   const getMaxStorage = () => {
     return new Promise((resolve, reject) => {
@@ -90,6 +104,7 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
                 console.log(res);
                 setUploading(false);
                 showMessage("File uploaded!");
+                setReloadFiles(true)
               })
               .catch((err) => {
                 console.log(err);
@@ -114,7 +129,7 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
             {selectingFilesToRemove &&
               <>
                 <li className="nav-item mr-2">
-                  <button className="btn btn-outline-danger btn-sm mt-1" onClick={logout}>
+                  <button className="btn btn-outline-danger btn-sm mt-1" onClick={onRemove}>
                   <i className="far fa-trash-alt"></i> Remove
                   </button>
                 </li>
