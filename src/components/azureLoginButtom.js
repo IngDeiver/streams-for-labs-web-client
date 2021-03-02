@@ -9,7 +9,8 @@ const LoginButtom = ({showMessage, disabled}) => {
   // Login user with UPB credentials
   const login = async () => {
     try {
-      const acces_token = await msalInstance.loginPopup({scopes});
+      const instance = await msalInstance();
+      const acces_token = await instance.loginPopup({scopes})
       console.log(acces_token)
       window.location.replace("/");
     } catch (err) {

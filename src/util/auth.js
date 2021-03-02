@@ -1,30 +1,36 @@
 import * as msal from "@azure/msal-browser";
 import { verifyAdminToken } from './jwt'
+import { queryVault } from '../services/vaultService'
 
-// Oauth cofig
-const msalConfig = {
-  auth: {
-    clientId: process.env.REACT_APP_AZURE_CLEINT_ID,
-    authority:process.env.REACT_APP_AZURE_AUTHORITY,
-  },
-  cache: {
-    cacheLocation: "localStorage",
-    storeAuthStateInCookie: false,
-  },
-};
+
 const ADMIN_SESION_KEY = "admin_sesion"
 
 export const scopes = ["user.read"];
 
 // MSA instance for managament sesion with azure
-export const msalInstance = new msal.PublicClientApplication(msalConfig);
+export const msalInstance = async() => {
+
+  const{ data: {data} }= await queryVault(process.env.REACT_APP_VAULT_SECRET_AZURE_URI)
+  // Oauth cofig
+  const msalConfig = {
+    auth: {
+      clientId: data.client_id,
+      authority:data.authority,
+    },
+    cache: {
+      cacheLocation: "localStorage",
+      storeAuthStateInCookie: false,
+    },
+  };
+  return new msal.PublicClientApplication(msalConfig)
+};
 
 /*If homeAccountId is null not exist a sesión of azure
   if not exist a sesion in local storage for admin, not exist admin sesion
   if not there are any sesion, not there is a user authenticated
   Return the role (user or admin) with the token (for will use in Athorization header) of user authenticated
 */
-export const getLocalSesion =  () => {
+export const getLocalSesion =  async () => {
  return new Promise(async (resolve, reject) => {
    // managem role
    let sesion = {
@@ -33,7 +39,8 @@ export const getLocalSesion =  () => {
   }
 
   // get sesion for azure
-  const accounts = msalInstance.getAllAccounts()
+  const instance = await msalInstance()
+  const accounts = instance.getAllAccounts()
   if(accounts.length > 0) {
     const { idToken } = await checkAzureToken()
     sesion.token = idToken
@@ -62,9 +69,10 @@ export const getLocalSesion =  () => {
 
 // Get current object account with azure
 export const getAccountByHomeAccountId = async () => {
-  const accounts = msalInstance.getAllAccounts()
+  const instance = await msalInstance()
+  const accounts = instance.getAllAccounts()
   const homeIde = accounts[0].homeAccountId;
-  return msalInstance.getAccountByHomeId(homeIde);
+  return instance.getAccountByHomeId(homeIde);
 };
 
  // Logout
@@ -78,7 +86,8 @@ export const getAccountByHomeAccountId = async () => {
   }
 
   const currentAccount = await getAccountByHomeAccountId();
-  msalInstance.logout({ account: currentAccount })
+  const instance = await msalInstance()
+  instance.logout({ account: currentAccount })
 };
 
   // Verify and refresh acces token when expired
@@ -95,12 +104,13 @@ export const checkAzureToken = async () => {
       loginHint: currentAccount.username, // For v1 endpoints, use upn from idToken claims
     };
 
-    return  msalInstance
+    const instance = await msalInstance()
+    return  instance
       .acquireTokenSilent(silentRequest)
       .catch(async (error) => {
-        if (error instanceof msalInstance.InteractionRequiredAuthError) {
+        if (error instanceof instance.InteractionRequiredAuthError) {
           // fallback to interaction when silent call fails
-          return await msalInstance
+          return await instance
             .acquireTokenPopup(request)
             .catch((error) => {
               console.log(error);
