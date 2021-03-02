@@ -1,15 +1,29 @@
-import react, { useState } from "react";
+import react, { useEffect, useState } from "react";
 import AzureLoginButtom from "../components/azureLoginButtom";
 import WithMessage from "../hocs/withMessage";
 import ReCAPTCHA from "react-google-recaptcha";
+import { getGoogleKeys } from '../services/vaultService'
 
 // Login page
-const Login = (props) => {
+const Login = ({ showMessage }) => {
   const [isHuman, setIsHuman] = useState(false);
+  const [captchatKey, setCaptchatKey] = useState('')
 
   const onChange = (value) => {
     if (value) setIsHuman(true);
   };
+
+  const loadGoogleKeys = () =>  {
+    getGoogleKeys()
+    .then(({data:{data}} )=> {
+      setCaptchatKey(data.captcha_key)
+    })
+    .catch(err => showMessage(err.message, "error"))
+  }
+
+  useEffect(() => {
+    loadGoogleKeys()
+  }, [captchatKey])
 
   return (
     <>
@@ -26,11 +40,14 @@ const Login = (props) => {
           </div>
           
           <div className="d-flex flex-row justify-content-md-center my-3 mx-2">
-            <ReCAPTCHA
-              sitekey={process.env.REACT_APP_CAPTCHA_SITE_KEY}
+            {
+              captchatKey !== '' &&
+              <ReCAPTCHA
+              sitekey={captchatKey}
               onChange={onChange}
               onExpired={() => setIsHuman(false)}
             />
+            }
           </div>
         </div>
       </div>
