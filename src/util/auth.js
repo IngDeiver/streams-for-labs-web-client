@@ -48,13 +48,13 @@ export const getLocalSesion =  () => {
   const admin_token = adminSesion["acces_token"]
 
   verifyAdminToken(admin_token)
-  .then(ok => {
+  .then(() => {
     sesion.token = admin_token
     sesion.role ="ADMIN"
     return resolve(sesion) 
   })
   .catch(err => {
-    console.log(err.message)
+    console.error(err.message)
     return reject(null)
   })
  })
