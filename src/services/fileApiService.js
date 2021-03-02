@@ -1,15 +1,14 @@
 import axios from 'axios'
 import { getLocalSesion } from '../util/auth'
-import { queryVault } from '../services/vaultService'
+
 
 const multipartHeader = {
     'Content-Type' : 'multipart/form-data'
 }
 
-const getAxiosInstance = async () => {
-    const { data: {data} } =  await queryVault(process.env.REACT_APP_VAULT_SECRET_ENV_URI)
+const getAxiosInstance =  () => {
     return axios.create({
-        baseURL: `${data.gateway}/api`
+        baseURL: `${process.env.REACT_APP_GATEWAY_SERVICE_BASE_URL}/api`
     });   
 }
 
