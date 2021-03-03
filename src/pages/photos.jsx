@@ -13,9 +13,9 @@ const Photos = ({ showMessage }) => {
   // This array should sorted! default by date!
   const [images, setImages] = useState([
     {
-      _id: "60371bda41ae1b7e6526d746",
-      author: "Pepito Pérez",
-      name: "pExample image 1.png",
+      _id: "603c48fa90115aa2a4ab12d4",
+      author: "Photos test xd",
+      name: "Photos.png",
       path: "https://picsum.photos/id/1018/1000/600/",
       shared_users: [],
       upload_at: "2021-02-27T03:39:06.955Z",
@@ -62,7 +62,7 @@ const Photos = ({ showMessage }) => {
   
   const onChangeSort = (e) => {
     const typeSort =  e.target.value
-    console.log("onChangeSort:",typeSort);
+    
     if (typeSort === 'date') {
       sortdate()
     }
@@ -84,9 +84,9 @@ const Photos = ({ showMessage }) => {
   }
 
    //Ordenar por fecha!
-  function sortdate (){
+  async function sortdate (){
    
-    const imagesdate = images.sort((em1, em2) => {
+    const imagesdate = await images.sort((em1, em2) => {
       return new Date(em1.upload_at) - new Date(em2.upload_at)
     })
     console.log(imagesdate);
@@ -95,14 +95,15 @@ const Photos = ({ showMessage }) => {
 
   function onDownloadPhotos() {
       download(currentImage._id)
-      .then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
+      .then((res) => {
+        const blob = res.data;
+        console.log(blob);
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
         link.href = url;
-        link.setAttribute('download', currentImage.name); 
-        document.body.appendChild(link);
+        link.setAttribute("download", currentImage.name);
         link.click();
-        showMessage('Photo download')
+        showMessage("Photo downloaded!");
      }).catch((error) => {
         showMessage(error.message, "error")
      })
