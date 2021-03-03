@@ -3,6 +3,7 @@ import "../styles/photos.css";
 import ImageGallery from "react-image-gallery";
 import WithMessage from "../hocs/withMessage";
 import WithAppLayout from "../layouts/appLayout";
+import { download, removePhotos } from '../services/photoApiService';
 
 
 const Photos = ({ showMessage }) => {
@@ -14,37 +15,37 @@ const Photos = ({ showMessage }) => {
     {
       _id: "60371bda41ae1b7e6526d746",
       author: "Pepito Pérez",
-      name: "Example image 1.png",
+      name: "pExample image 1.png",
       path: "https://picsum.photos/id/1018/1000/600/",
       shared_users: [],
-      upload_at: "2021-02-25T03:39:06.955Z",
+      upload_at: "2021-02-27T03:39:06.955Z",
       weight: 23094,
     },
     {
       _id: "60371bda41ae1b7e6526d746",
-      author: "Pepito Pérez",
-      name: "Example image 2.png",
+      author: "Aepito Pérez",
+      name: "aExample image 2.png",
       path: "https://picsum.photos/id/1015/1000/600/",
       shared_users: [],
-      upload_at: "2021-02-25T03:39:06.955Z",
+      upload_at: "2010-02-23T03:39:06.955Z",
       weight: 23094,
     },
     {
       _id: "60371bda41ae1b7e6526d746",
-      author: "Pepito Pérez",
-      name: "Example image 3.png",
+      author: "Zepito Pérez",
+      name: "zExample image 3.png",
       path: "https://picsum.photos/id/1019/1000/600/",
       shared_users: [],
-      upload_at: "2021-02-25T03:39:06.955Z",
+      upload_at: "2020-02-10T03:39:06.955Z",
       weight: 23094,
     },
     {
       _id: "60371bda41ae1b7e6526d746",
-      author: "Pepito Pérez",
-      name: "Esta imagen falla porque esta es en mi pc",
-      path: "http://localhost:5000/api/photo/603bda662a3ffd370138c8bb/603a7276f310b3ae89a22b8a",
+      author: "Bepito Pérez",
+      name: "bExample image 3.png",
+      path: "https://picsum.photos/id/1019/1000/600/",
       shared_users: [],
-      upload_at: "2021-02-25T03:39:06.955Z",
+      upload_at: "2009-02-30T03:39:06.955Z",
       weight: 23094,
     },
   ]);
@@ -62,6 +63,58 @@ const Photos = ({ showMessage }) => {
   const onChangeSort = (e) => {
     const typeSort =  e.target.value
     console.log("onChangeSort:",typeSort);
+    if (typeSort === 'date') {
+      sortdate()
+    }
+    if (typeSort === 'name') {
+      sortname()
+    }
+    setCurrentImage(images[0])
+  }
+
+  //Ordenar por nombre!
+  async function  sortname (){
+    
+    const imagesname = await images.sort((em1, em2) => {
+      return (em1.name < em2.name) ? -1 : 1
+    })
+    console.log(imagesname);
+    setImages(imagesname)
+
+  }
+
+   //Ordenar por fecha!
+  function sortdate (){
+   
+    const imagesdate = images.sort((em1, em2) => {
+      return new Date(em1.upload_at) - new Date(em2.upload_at)
+    })
+    console.log(imagesdate);
+    setImages(imagesdate)
+  }
+
+  function onDownloadPhotos() {
+      download(currentImage._id)
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', currentImage.name); 
+        document.body.appendChild(link);
+        link.click();
+        showMessage('Photo download')
+     }).catch((error) => {
+        showMessage(error.message, "error")
+     })
+  }
+
+  function onRemovePhotos() {
+    removePhotos([currentImage._id])
+    .then((response) => {
+      showMessage('Photo remove')
+   }).catch((error) => {
+      showMessage(error.message, "error")
+   })
   }
 
   useEffect(() => {
@@ -72,15 +125,17 @@ const Photos = ({ showMessage }) => {
     <div>
       <div className="d-flex flex-row justify-content-center my-2">
         <select className="custom-select custom-select-sm w-50"
-        onChange={onChangeSort}>
+          onChange={onChangeSort}>
           <option selected>Select a sort</option>
           <option value="date">By date</option>
           <option value="name">By name</option>
         </select>
-        <button type="button" className="btn btn-outline-danger btn-sm mx-2">
+        <button onClick={onRemovePhotos}
+        type="button" className="btn btn-outline-danger btn-sm mx-2">
           Remove
         </button>
-        <button type="button" className="btn btn-outline-info btn-sm">
+        <button onClick={onDownloadPhotos}
+        type="button" className="btn btn-outline-info btn-sm">
           Download
         </button>
       </div>
@@ -95,7 +150,7 @@ const Photos = ({ showMessage }) => {
           onImageLoad={onImageLoad}
           thumbnailPosition="left"
           lazyLoad={true}
-          autoPlay
+          //autoPlay
         />
         <h4 style={{position:'absolute', top:10}} className="text-bold text-center">
           {currentImage.name?.toUpperCase()}
