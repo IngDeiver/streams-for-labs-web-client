@@ -10,7 +10,7 @@ const getAxiosInstance =  () => {
 export const download = async (photoId) => {
     const { token } = await  getLocalSesion();
     const axiosInstance = await getAxiosInstance()
-    return axiosInstance.get(`/photo/${photoId}`, 
+    return axiosInstance.get(`/photo/download/${photoId}`, 
         { headers: {'Authorization': `Bearer ${token}` },
         responseType: 'blob'
     })

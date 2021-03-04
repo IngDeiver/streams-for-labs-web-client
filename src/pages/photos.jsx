@@ -3,8 +3,7 @@ import "../styles/photos.css";
 import ImageGallery from "react-image-gallery";
 import WithMessage from "../hocs/withMessage";
 import WithAppLayout from "../layouts/appLayout";
-import { download, removePhotos } from '../services/photoApiService';
-
+import { download, removePhotos } from "../services/photoApiService";
 
 const Photos = ({ showMessage }) => {
   const [currentImage, setCurrentImage] = useState({});
@@ -13,9 +12,9 @@ const Photos = ({ showMessage }) => {
   const [images, setImages] = useState([
     {
       _id: "603c48fa90115aa2a4ab12d4",
-      author: "Photos test xd",
-      name: "Photos.png",
-      path: "https://picsum.photos/id/1018/1000/600/",
+      author: "Deiver",
+      name: "Photos Solo esta en mi pc xd.png",
+      path: "http://localhost:8000/api/photo/download/603c48fa90115aa2a4ab12d4",
       shared_users: [],
       upload_at: "2021-02-27T03:39:06.955Z",
       weight: 23094,
@@ -48,52 +47,46 @@ const Photos = ({ showMessage }) => {
       weight: 23094,
     },
   ]);
-  const [existRequest, setExistRequest] = useState(false)
+  const [existRequest, setExistRequest] = useState(false);
 
   const onSlide = (index) => {
     console.log("onSlide: ", index);
     setCurrentImage(images[index]);
   };
 
-
-  
-  
   const onChangeSort = (e) => {
-    const typeSort =  e.target.value
-    
-    if (typeSort === 'date') {
-      sortdate()
+    const typeSort = e.target.value;
+
+    if (typeSort === "date") {
+      sortdate();
     }
-    if (typeSort === 'name') {
-      sortname()
+    if (typeSort === "name") {
+      sortname();
     }
-    setCurrentImage(images[0])
-  }
+    setCurrentImage(images[0]);
+  };
 
   //Ordenar por nombre!
-  async function  sortname (){
-    
+  async function sortname() {
     const imagesname = await images.sort((em1, em2) => {
-      return (em1.name < em2.name) ? -1 : 1
-    })
+      return em1.name < em2.name ? -1 : 1;
+    });
     console.log(imagesname);
-    setImages(imagesname)
-
+    setImages(imagesname);
   }
 
-   //Ordenar por fecha!
-  async function sortdate (){
-   
+  //Ordenar por fecha!
+  async function sortdate() {
     const imagesdate = await images.sort((em1, em2) => {
-      return new Date(em1.upload_at) - new Date(em2.upload_at)
-    })
+      return new Date(em1.upload_at) - new Date(em2.upload_at);
+    });
     console.log(imagesdate);
-    setImages(imagesdate)
+    setImages(imagesdate);
   }
 
   function onDownloadPhotos() {
-      setExistRequest(true)
-      download(currentImage._id)
+    setExistRequest(true);
+    download(currentImage._id)
       .then((res) => {
         const blob = res.data;
         console.log(blob);
@@ -103,23 +96,25 @@ const Photos = ({ showMessage }) => {
         link.setAttribute("download", currentImage.name);
         link.click();
         showMessage("Photo downloaded!");
-        setExistRequest(false)
-     }).catch((error) => {
-        showMessage(error.message, "error")
-        setExistRequest(false)
-     })
+        setExistRequest(false);
+      })
+      .catch((error) => {
+        showMessage(error.message, "error");
+        setExistRequest(false);
+      });
   }
 
   function onRemovePhotos() {
-    setExistRequest(true)
+    setExistRequest(true);
     removePhotos([currentImage._id])
-    .then((response) => {
-      showMessage('Photo remove')
-      setExistRequest(false)
-   }).catch((error) => {
-      showMessage(error.message, "error")
-      setExistRequest(false)
-   })
+      .then((response) => {
+        showMessage("Photo remove");
+        setExistRequest(false);
+      })
+      .catch((error) => {
+        showMessage(error.message, "error");
+        setExistRequest(false);
+      });
   }
 
   useEffect(() => {
@@ -128,41 +123,74 @@ const Photos = ({ showMessage }) => {
 
   return (
     <div>
-      <div className="d-flex flex-row mb-2 mt-3 justify-content-end mr-5">
-        <select  style={{width:"20%"}} className="custom-select custom-select-sm"
-          onChange={onChangeSort}>
+      <div className="d-flex flex-row mb-2 mt-3 justify-content-start ml-1">
+        <select
+          style={{ width: "20%" }}
+          className="custom-select custom-select-sm"
+          onChange={onChangeSort}
+        >
           <option selected>Select a sort</option>
           <option value="date">By date</option>
           <option value="name">By name</option>
         </select>
-        <button onClick={onRemovePhotos}
-        type="button" disabled={existRequest} className="btn btn-outline-danger btn-sm mx-2">
-          Remove
-        </button>
-        <button disabled={existRequest} onClick={onDownloadPhotos}
-        type="button" className="btn btn-outline-info btn-sm">
-          Download
-        </button>
-        <button disabled={existRequest}
-        type="button" className="btn btn-outline-success btn-sm ml-2">
-          Share
-        </button>
       </div>
-      <div style={{position:'relative'}} className="d-flex flex-row justify-content-center">
-        <ImageGallery
-          items={images.map((img) => ({
-            original: img.path,
-            thumbnail: img.path
-          }))}
-          onSlide={onSlide}
-          onBeforeSlide={onSlide}
-          thumbnailPosition="left"
-          lazyLoad={true}
-          //autoPlay
-        />
-        <h4 style={{position:'absolute', top:10}} className="text-bold text-center">
-          {currentImage.name?.toUpperCase()}
-        </h4>
+      <div style={{ position: "relative" }}>
+        {images.length > 0 ? (
+          <ImageGallery
+            items={images.map((img) => {
+              const path = `${process.env.REACT_APP_GATEWAY_SERVICE_BASE_URL}/api/photo/download/${img._id}`;
+              return {
+                original: img.path,
+                thumbnail: img.path,
+              };
+            })}
+            onSlide={onSlide}
+            onBeforeSlide={onSlide}
+            thumbnailPosition="left"
+            lazyLoad
+            showFullscreenButton={false}
+            showPlayButton={false}
+          />
+        ) : (
+          <p className="text-muted text-center">Start to share photos!</p>
+        )}
+        <div className="d-flex justify-content-center">
+          <h4
+            style={{ position: "absolute", top: 10 }}
+            className="text-bold text-center"
+          >
+            {currentImage.name?.toUpperCase()}
+          </h4>
+        </div>
+        <div className="d-flex justify-content-center">
+          <div
+            style={{ position: "absolute", bottom: 10 }}
+          >
+            <button
+            onClick={onRemovePhotos}
+            type="button"
+            disabled={existRequest}
+            className="btn btn-outline-danger btn-sm mx-2"
+          >
+            Remove
+          </button>
+          <button
+            disabled={existRequest}
+            onClick={onDownloadPhotos}
+            type="button"
+            className="btn btn-outline-info btn-sm"
+          >
+            Download
+          </button>
+          <button
+            disabled={existRequest}
+            type="button"
+            className="btn btn-outline-success btn-sm ml-2"
+          >
+            Share
+          </button>
+          </div>
+        </div>
       </div>
     </div>
   );
