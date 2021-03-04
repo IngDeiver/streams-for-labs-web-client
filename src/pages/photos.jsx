@@ -8,7 +8,6 @@ import { download, removePhotos } from '../services/photoApiService';
 
 const Photos = ({ showMessage }) => {
   const [currentImage, setCurrentImage] = useState({});
-  const [countImagesLoadedInCarrousel, setCount] = useState(0)
 
   // This array should sorted! default by date!
   const [images, setImages] = useState([
@@ -49,6 +48,7 @@ const Photos = ({ showMessage }) => {
       weight: 23094,
     },
   ]);
+  const [existRequest, setExistRequest] = useState(false)
 
   const onSlide = (index) => {
     console.log("onSlide: ", index);
@@ -56,9 +56,7 @@ const Photos = ({ showMessage }) => {
   };
 
 
-  const onImageLoad = (e) => {
-    setCount(countImagesLoadedInCarrousel+1)
-  }
+  
   
   const onChangeSort = (e) => {
     const typeSort =  e.target.value
@@ -94,6 +92,7 @@ const Photos = ({ showMessage }) => {
   }
 
   function onDownloadPhotos() {
+      setExistRequest(true)
       download(currentImage._id)
       .then((res) => {
         const blob = res.data;
@@ -104,17 +103,22 @@ const Photos = ({ showMessage }) => {
         link.setAttribute("download", currentImage.name);
         link.click();
         showMessage("Photo downloaded!");
+        setExistRequest(false)
      }).catch((error) => {
         showMessage(error.message, "error")
+        setExistRequest(false)
      })
   }
 
   function onRemovePhotos() {
+    setExistRequest(true)
     removePhotos([currentImage._id])
     .then((response) => {
       showMessage('Photo remove')
+      setExistRequest(false)
    }).catch((error) => {
       showMessage(error.message, "error")
+      setExistRequest(false)
    })
   }
 
@@ -124,20 +128,24 @@ const Photos = ({ showMessage }) => {
 
   return (
     <div>
-      <div className="d-flex flex-row justify-content-center my-2">
-        <select className="custom-select custom-select-sm w-50"
+      <div className="d-flex flex-row mb-2 mt-3 justify-content-end mr-5">
+        <select  style={{width:"20%"}} className="custom-select custom-select-sm"
           onChange={onChangeSort}>
           <option selected>Select a sort</option>
           <option value="date">By date</option>
           <option value="name">By name</option>
         </select>
         <button onClick={onRemovePhotos}
-        type="button" className="btn btn-outline-danger btn-sm mx-2">
+        type="button" disabled={existRequest} className="btn btn-outline-danger btn-sm mx-2">
           Remove
         </button>
-        <button onClick={onDownloadPhotos}
+        <button disabled={existRequest} onClick={onDownloadPhotos}
         type="button" className="btn btn-outline-info btn-sm">
           Download
+        </button>
+        <button disabled={existRequest}
+        type="button" className="btn btn-outline-success btn-sm ml-2">
+          Share
         </button>
       </div>
       <div style={{position:'relative'}} className="d-flex flex-row justify-content-center">
@@ -148,7 +156,6 @@ const Photos = ({ showMessage }) => {
           }))}
           onSlide={onSlide}
           onBeforeSlide={onSlide}
-          onImageLoad={onImageLoad}
           thumbnailPosition="left"
           lazyLoad={true}
           //autoPlay
