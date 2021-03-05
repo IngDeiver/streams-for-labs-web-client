@@ -7,6 +7,12 @@ const getAxiosInstance =  () => {
     });   
 }
 
+export const listPhotos = async ()=> {
+    const { token } = await  getLocalSesion();
+    const axiosInstance = await getAxiosInstance()
+    return axiosInstance.get(`/photo`,
+    { headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }})}
+
 export const download = async (photoId) => {
     const { token } = await  getLocalSesion();
     const axiosInstance = await getAxiosInstance()
