@@ -6,6 +6,19 @@ import { download } from "../services/fileApiService";
 import WithMessage from "../hocs/withMessage";
 import { AppContext } from "../context/AppProvider";
 
+
+
+  
+
+  
+
+
+ 
+
+
+
+
+
 const File = ({
   loading = true,
   files = [],
@@ -14,6 +27,8 @@ const File = ({
   onSelectedFile,
   showMessage,
 }) => {
+  
+  
   
   const context = useContext(AppContext)
   const selectingFilesToRemove = context[4]
@@ -65,6 +80,7 @@ const File = ({
       })
       .catch((err) => showMessage(err.message, "error"));
   };
+  
 
   
 
@@ -86,14 +102,52 @@ const File = ({
     if(filesToRemove.data.length === 0) setSelectingFilesToRemove(false)
   }
 
+  
+  const [shouldSort, setShouldSort] = useState(false);
+  
+
+
+
+  const onSortClicked = () => {
+    let sortName = files.sort(function(a, b) {
+      setShouldSort(true);
+    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+  
+    // names must be equal
+    return 0;
+  });
+}
+
+const onSortClickDate = () => {
+  
+  let sortDate = files.sort((a,b) => {
+    setShouldSort(true);
+    return new Date(a.scheduled_for).getTime() - 
+        new Date(b.scheduled_for).getTime()
+}).reverse();
+}
+
+  
+
+
+  
+
+
   return (
     <div className="container-fluid">
       <div className="row border py-2 mx-3">
         <div className={`col-${isSharedSection ? "3" : "5"}`}>
-          Name <i className="fas fa-caret-down"></i>
+          Name <i className="fas fa-caret-down"onClick={onSortClicked} ></i>
         </div>
         <div className="col-2">
-          Date <i className="fas fa-caret-down"></i>
+          Date <i className="fas fa-caret-down"onClick={onSortClickDate}></i>
         </div>
         <div className="col-2">
           Size <i className="fas fa-caret-down"></i>
@@ -184,5 +238,6 @@ const File = ({
     </div>
   );
 };
+
 
 export default WithMessage(File);
