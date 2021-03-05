@@ -3,7 +3,7 @@ import "../styles/photos.css";
 import ImageGallery from "react-image-gallery";
 import WithMessage from "../hocs/withMessage";
 import WithAppLayout from "../layouts/appLayout";
-import { download, removePhotos } from "../services/photoApiService";
+import { download, removePhotos,listPhotos } from "../services/photoApiService";
 
 const Photos = ({ showMessage }) => {
   const [currentImage, setCurrentImage] = useState({});
@@ -28,6 +28,7 @@ const Photos = ({ showMessage }) => {
       upload_at: "2010-02-23T03:39:06.955Z",
       weight: 23094,
     },
+
     {
       _id: "60371bda41ae1b7e6526d746",
       author: "Zepito Pérez",
@@ -46,9 +47,11 @@ const Photos = ({ showMessage }) => {
       upload_at: "2009-02-30T03:39:06.955Z",
       weight: 23094,
     },
+
   ]);
   const [existRequest, setExistRequest] = useState(false);
 
+  
   const onSlide = (index) => {
     console.log("onSlide: ", index);
     setCurrentImage(images[index]);
@@ -84,6 +87,29 @@ const Photos = ({ showMessage }) => {
     setImages(imagesdate);
   }
 
+  function getPhotos(){
+    setExistRequest(true);
+    listPhotos()
+    .then((res)=> {
+      const photos= res.data;
+      console.log(photos);
+      setImages(photos)
+      setExistRequest(false);
+    })
+    .catch((error) => {
+      showMessage(error.message, "error");
+      setExistRequest(false);
+    });
+  }
+  
+ useEffect(()=> {
+    getPhotos();
+ }, [])
+
+  useEffect(() => {    
+    setCurrentImage(images[0]);
+  }, [images]);
+
   function onDownloadPhotos() {
     setExistRequest(true);
     download(currentImage._id)
@@ -117,9 +143,7 @@ const Photos = ({ showMessage }) => {
       });
   }
 
-  useEffect(() => {
-    setCurrentImage(images[0]);
-  }, [images]);
+ 
 
   return (
     <div>
@@ -168,6 +192,7 @@ const Photos = ({ showMessage }) => {
           >
             <button
             onClick={onRemovePhotos}
+            //
             type="button"
             disabled={existRequest}
             className="btn btn-outline-danger btn-sm mx-2"
