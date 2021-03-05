@@ -102,9 +102,9 @@ const Photos = ({ showMessage }) => {
     });
   }
   
- // useEffect(()=> {
- //   getPhotos();
- // }, [])
+ useEffect(()=> {
+    getPhotos();
+ }, [])
 
   useEffect(() => {    
     setCurrentImage(images[0]);
