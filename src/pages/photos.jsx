@@ -11,7 +11,7 @@ const Photos = ({ showMessage }) => {
   // This array should sorted! default by date!
   const [images, setImages] = useState([
     {
-      _id: "603c48fa90115aa2a4ab12d4",
+      _id: "6041784962923c4c08031226",
       author: "Deiver",
       name: "Photos Solo esta en mi pc xd.png",
       path: "http://localhost:8000/api/photo/download/603c48fa90115aa2a4ab12d4",
@@ -140,8 +140,8 @@ const Photos = ({ showMessage }) => {
             items={images.map((img) => {
               const path = `${process.env.REACT_APP_GATEWAY_SERVICE_BASE_URL}/api/photo/download/${img._id}`;
               return {
-                original: img.path,
-                thumbnail: img.path,
+                original: path,
+                thumbnail: path,
               };
             })}
             onSlide={onSlide}
