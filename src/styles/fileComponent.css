@@ -5,3 +5,7 @@
 .dropdown-toggle::before {
     display:none !important;
 }
+
+.sort:hover {
+    cursor: pointer;
+}

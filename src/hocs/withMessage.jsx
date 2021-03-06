@@ -13,7 +13,7 @@ const WithMessage = (Component) => {
         <>
           <Component showMessage={this.showMessage} {...this.props}/>
           <ToastContainer
-            position="top-right"
+            position="bottom-right"
             autoClose={5000}
             hideProgressBar={true}
             newestOnTop={false}
