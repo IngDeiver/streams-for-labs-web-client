@@ -10,6 +10,7 @@ import {
 } from "../services/photoApiService";
 import { AppContext } from "../context/AppProvider";
 import Spinner from "../components/spinner";
+import { onSort } from "../util/sort";
 
 const Photos = ({ showMessage }) => {
   const [currentImage, setCurrentImage] = useState({});
@@ -27,35 +28,14 @@ const Photos = ({ showMessage }) => {
     setCurrentImage(images[index]);
   };
 
-  const onChangeSort = (e) => {
+  const onChangeSort = async (e) => {
     const typeSort = e.target.value;
-
-    if (typeSort === "date") {
-      sortdate();
-    }
-    if (typeSort === "name") {
-      sortname();
-    }
-    setCurrentImage(images[0]);
+    const photosSorted = await onSort(typeSort, [...images])
+    setImages(photosSorted)
+    setCurrentImage(photosSorted[0]);
   };
 
-  //Ordenar por nombre!
-  async function sortname() {
-    const imagesname = await images.sort((em1, em2) => {
-      return em1.name < em2.name ? -1 : 1;
-    });
-    console.log(imagesname);
-    setImages(imagesname);
-  }
 
-  //Ordenar por fecha!
-  async function sortdate() {
-    const imagesdate = await images.sort((em1, em2) => {
-      return new Date(em1.upload_at) - new Date(em2.upload_at);
-    });
-    console.log(imagesdate);
-    setImages(imagesdate);
-  }
 
   function getPhotos() {
     setExistRequest(true);

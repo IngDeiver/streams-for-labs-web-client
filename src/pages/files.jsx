@@ -5,6 +5,8 @@ import WithAppLayout from '../layouts/appLayout'
 import FileComponent from "../components/file";
 import { getFiles } from '../services/fileApiService'
 import { AppContext } from '../context/AppProvider';
+import { onSort } from '../util/sort'
+
 
 const Files = ({ showMessage }) => {
 
@@ -13,6 +15,11 @@ const Files = ({ showMessage }) => {
     const context = useContext(AppContext)
     const reloadFiles = context[8]
     const setReloadFiles = context[9]
+
+    const handleSort = async  (typeSort) => {
+      const sortFiles = await onSort(typeSort, [...files])
+      setFiles(sortFiles)
+    }
 
     const listFiles = () => {
       getFiles()
@@ -32,28 +39,13 @@ const Files = ({ showMessage }) => {
     useEffect(()=> {
       listFiles()
     }, [reloadFiles])
-
-   
-    const handleDownload = (fileToDownload) => {
-        alert("Download: " + fileToDownload._id)
-    };
-    const handleShared = (fileToShare) => {
-      alert("Share: " + fileToShare.name)
-    };
-    const handleSelecFile = (fileSelected) => {
-      alert("File selected: " + fileSelected.name)
-
-      
-    }
     
     return (
       <>
         <FileComponent  
         loading = {loadingFiles}
         files={files} 
-        onDownload={handleDownload} 
-        onShared={handleShared}
-        onSelectedFile={handleSelecFile}/>
+        onSort={handleSort}/>
       </>
     );
 
