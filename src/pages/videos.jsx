@@ -33,12 +33,6 @@ const Videos = () => {
 
   const [currentVideo, setCurrentVideo] = useState(videos[0]);
 
-  const handleDownload = (fileToDownload) => {
-    alert("Download: " + fileToDownload.name);
-  };
-  const handleShared = (fileToShare) => {
-    alert("Share: " + fileToShare.name);
-  };
   const handleSelecFile = (fileSelected) => {
     setCurrentVideo(fileSelected);
   };
@@ -61,8 +55,6 @@ const Videos = () => {
       <FileComponent
         loading={false}
         files={videos}
-        onDownload={handleDownload}
-        onShared={handleShared}
         onSelectedFile={handleSelecFile}
         onSort={handleSort}
       />
