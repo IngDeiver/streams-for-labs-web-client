@@ -17,7 +17,7 @@ export const listVideos = async () => {
 export const download = async (videoId) => {
     const { token } = await getLocalSesion();
     const axiosInstance = await getAxiosInstance()
-    return axiosInstance.get(`/photo/download/${videoId}`,
+    return axiosInstance.get(`/video/download/${videoId}`,
         {
             headers: { 'Authorization': `Bearer ${token}` },
             responseType: 'blob'

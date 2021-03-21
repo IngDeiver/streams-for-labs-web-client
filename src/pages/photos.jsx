@@ -146,6 +146,7 @@ const Photos = ({ showMessage }) => {
         )}
         <div className="d-flex justify-content-center">
           <h4
+          // Imprimimos el nombre de la imagen
             style={{ position: "absolute", top: 10 }}
             className="text-bold text-center"
           >
@@ -157,7 +158,7 @@ const Photos = ({ showMessage }) => {
             <div style={{ position: "absolute", bottom: 10 }}>
               <button
                 onClick={onRemovePhotos}
-                //
+                // Hacemos un boton para remover la imagen
                 type="button"
                 disabled={existRequest}
                 className="btn btn-outline-danger btn-sm mx-2"
@@ -167,6 +168,7 @@ const Photos = ({ showMessage }) => {
               <button
                 disabled={existRequest}
                 onClick={onDownloadPhotos}
+                // Hacemos un boton para descargar la imagen
                 type="button"
                 className="btn btn-outline-info btn-sm"
               >
