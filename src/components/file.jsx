@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import "../styles/fileComponent.css";
 import moment from "moment";
 import Spinner from "./spinner";
-import { download } from "../services/fileApiService";
+import { downloadFile } from "../services/fileApiService";
+import { downloadPhoto } from "../services/photoApiService";
 import WithMessage from "../hocs/withMessage";
 import { AppContext } from "../context/AppProvider";
 
@@ -57,10 +58,10 @@ const File = ({
   };
 
   const onDownload = (file) => {
-    download(file._id)
+    if(file.path.includes("/files/")){
+      downloadFile(file._id)
       .then((res) => {
         const blob = res.data;
-        console.log(blob);
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -69,6 +70,25 @@ const File = ({
         showMessage("File downloaded!");
       })
       .catch((err) => showMessage(err.message, "error"));
+    } else if(file.path.includes("/photos/")){
+      downloadPhoto(file._id)
+      .then((res) => {
+        const blob = res.data;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", file.name);
+        link.click();
+        showMessage("Photo downloaded!");
+      })
+      .catch((error) => {
+        showMessage(error.message, "error");
+      });
+    }
+    else {
+     
+    }
+   
   };
 
   const handleCheckFile = (e, file) => {
