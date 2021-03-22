@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Player } from "video-react";
 import { onSort } from "../util/sort";
 import WithMessage from "../hocs/withMessage";
 import WithAppLayout from "../layouts/appLayout";
 import FileComponent from "../components/file";
 import { useState } from "react";
+import { AppContext } from "../context/AppProvider";
 
 const Videos = () => {
   const VIDEO_API = 'api/video/download'
+  const context = useContext(AppContext);
+  const reloadFiles = context[8];
+  const setReloadFiles = context[9];
 
   const [videos, SetVideos] = useState([
     {
-      _id: "6058d73921ad3f3d40062bce",
+      _id: "6058fe415a35886c25a826fa",
       author: "Pepito Pérez",
       name: "Video.mp4",
       path:"/home/streams-for-lab.co/deiver-guerra-carrascal/videos/Video.mp4",
@@ -20,13 +24,13 @@ const Videos = () => {
       weight: 23094,
     },
     {
-      _id: "",
+      _id: "605906de5a35886c25a826fb",
       author: "Julanito",
       name: "Video2.pm4",
-      path:"",
+      path:"/home/streams-for-lab.co/deiver-guerra-carrascal/videos/Video2.mp4",
       shared_users: [],
       upload_at: "2021-02-25T03:39:06.955Z",
-      weight: 23094,
+      weight: 456094,
     },
   ]);
 
@@ -41,6 +45,11 @@ const Videos = () => {
     setCurrentVideo(fileSelected);
   };
 
+  useEffect(() => {
+    // list videos
+    // remember use setReloadFiles
+  }, [reloadFiles]);
+  
   return (
     <>
       <div className="d-flex flex-row justify-content-center mt-2">
