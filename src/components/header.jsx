@@ -5,22 +5,21 @@ import "../styles/header.css";
 import { upload } from "../services/fileApiService";
 import withMessage from "../hocs/withMessage";
 import { getMaxStorageAvailable } from "../services/fileApiService";
-import { removeFiles } from '../services/fileApiService'
+import { removeFiles } from "../services/fileApiService";
+import { removeVideos } from "../services/videoApiService";
 import { getStorageUsed } from "../services/fileApiService";
-import { AppContext } from '../context/AppProvider'
+import { AppContext } from "../context/AppProvider";
 const GB = 1000000000; //numero de bytes que tiene 1GB
-
 
 const Header = ({ noIsAdminSection = true, showMessage }) => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState("0%");
-  const context = useContext(AppContext)
-  const selectingFilesToRemove = context[4]
-  const setSelectingFilesToRemove = context[5]
-  const filesToRemove = context[6]
-  const setReloadFiles = context[9]
+  const context = useContext(AppContext);
+  const selectingFilesToRemove = context[4];
+  const setSelectingFilesToRemove = context[5];
+  const filesToRemove = context[6];
+  const setReloadFiles = context[9];
 
-  
   const onUploadProgress = (progressEvent) => {
     const percentCompleted = Math.round(
       (progressEvent.loaded * 100) / progressEvent.total
@@ -29,26 +28,37 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
   };
 
   const onRemove = () => {
-    console.log("Borrar->", filesToRemove);
-    removeFiles(filesToRemove.data, filesToRemove.areVideos)
-    .then(() => {
-      showMessage("Files removed!")
-      setSelectingFilesToRemove(false)
-      setReloadFiles(true)
-    })
-    .catch(err => showMessage(err.message, "error"))
-  }
+    // si son videos
+    if (filesToRemove.areVideos) {
+      removeVideos(filesToRemove.data)
+        .then(() => {
+          showMessage("Video(s) removed!");
+          setSelectingFilesToRemove(false);
+          setReloadFiles(true);
+        })
+        .catch((err) => showMessage(err.message, "error"));
+    } else {
+      // si no son videos
+      removeFiles(filesToRemove.data)
+        .then(() => {
+          showMessage("File(s) removed!");
+          setSelectingFilesToRemove(false);
+          setReloadFiles(true);
+        })
+        .catch((err) => showMessage(err.message, "error"));
+    }
+  };
 
   const getMaxStorage = () => {
     return new Promise((resolve, reject) => {
       getMaxStorageAvailable()
         // Get max user storage (GB)
         .then((res) => {
-          const maxStorage = res.data.maxStoraged
+          const maxStorage = res.data.maxStoraged;
           console.log("Max: ", maxStorage);
-          resolve(maxStorage)
+          resolve(maxStorage);
         })
-        .catch(err => reject(err));
+        .catch((err) => reject(err));
       resolve(5);
     });
   };
@@ -59,7 +69,7 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
         // Obtiene el espacio de alamacenamiento ocupado por el usuario
         .then((res) => {
           console.log("storageUsed: ", res.data.storageUsed);
-            resolve(res.data.storageUsed / GB);
+          resolve(res.data.storageUsed / GB);
         })
         .catch((err) => reject(err));
     });
@@ -73,7 +83,12 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
           const userStorageUsed = results[1];
           const newSizeToStorage = fileSize / GB;
           if (userStorageUsed + newSizeToStorage > maxSize) {
-            showMessage(`Storage exceeded, you have available: ${maxSize - userStorageUsed }GB`,"error");
+            showMessage(
+              `Storage exceeded, you have available: ${
+                maxSize - userStorageUsed
+              }GB`,
+              "error"
+            );
             resolve(false);
             setUploading(false);
           } else {
@@ -102,7 +117,7 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
                 console.log(res);
                 setUploading(false);
                 showMessage("File uploaded!");
-                setReloadFiles(true)
+                setReloadFiles(true);
               })
               .catch((err) => {
                 console.log(err);
@@ -124,20 +139,26 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
       <div className="container-fluid d-flex flex-row-reverse">
         <div>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            {selectingFilesToRemove &&
+            {selectingFilesToRemove && (
               <>
                 <li className="nav-item mr-2">
-                  <button className="btn btn-outline-danger btn-sm mt-1" onClick={onRemove}>
-                  <i className="far fa-trash-alt"></i> Remove
+                  <button
+                    className="btn btn-outline-danger btn-sm mt-1"
+                    onClick={onRemove}
+                  >
+                    <i className="far fa-trash-alt"></i> Remove
                   </button>
                 </li>
                 <li className="nav-item mr-2">
-                  <button className="btn btn-outline-secondary btn-sm mt-1" onClick={() =>setSelectingFilesToRemove(false)}>
-                   Cancel
+                  <button
+                    className="btn btn-outline-secondary btn-sm mt-1"
+                    onClick={() => setSelectingFilesToRemove(false)}
+                  >
+                    Cancel
                   </button>
-              </li>
+                </li>
               </>
-            }
+            )}
             {noIsAdminSection && (
               <li className="nav-item mr-2">
                 <form>
@@ -153,11 +174,11 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
                     <p className="mt-2 mr-2">{progress}</p>
                   ) : (
                     <>
-                      { !selectingFilesToRemove && 
+                      {!selectingFilesToRemove && (
                         <label for="file">
                           <i className="fas fa-file-upload"></i> Upload
                         </label>
-                      }
+                      )}
                     </>
                   )}
                 </form>

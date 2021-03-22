@@ -52,10 +52,10 @@ export const getMaxStorageAvailable = async () => {
     { headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }})
 }
 
-export const removeFiles = async (files, isVideo=false) => {
+export const removeFiles = async (files) => {
     const { token } = await  getLocalSesion();
     const axiosInstance = await getAxiosInstance()
-    return axiosInstance.delete(`${isVideo ? '/video': '/file'}`,
+    return axiosInstance.delete('/file',
     { data: {files},
       headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }
     })

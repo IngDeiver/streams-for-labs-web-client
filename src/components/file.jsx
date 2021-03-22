@@ -4,6 +4,7 @@ import moment from "moment";
 import Spinner from "./spinner";
 import { downloadFile } from "../services/fileApiService";
 import { downloadPhoto } from "../services/photoApiService";
+import { downloadVideo } from "../services/videoApiService";
 import WithMessage from "../hocs/withMessage";
 import { AppContext } from "../context/AppProvider";
 
@@ -86,7 +87,19 @@ const File = ({
       });
     }
     else {
-     
+      downloadVideo(file._id)
+      .then((res) => {
+        const blob = res.data;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", file.name);
+        link.click();
+        showMessage("Video downloaded!");
+      })
+      .catch((error) => {
+        showMessage(error.message, "error");
+      });
     }
    
   };
@@ -99,7 +112,7 @@ const File = ({
     if (checked) {
       currentFilesToremove.push(file._id);
       SetFilesToRemove({
-        areVideos: file.path.includes("videos"),
+        areVideos: file.path.includes("/videos/"),
         data: currentFilesToremove,
       });
       setSelectingFilesToRemove(true);

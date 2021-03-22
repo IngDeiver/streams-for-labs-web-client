@@ -22,11 +22,11 @@ export const downloadPhoto = async (photoId) => {
     })
 }
 
-export const removePhotos = async (photo, isVideo=false) => {
+export const removePhotos = async (photos) => {
     const { token } = await  getLocalSesion();
     const axiosInstance = await getAxiosInstance()
-    return axiosInstance.delete(`${isVideo ? '/video': '/photo'}`,
-    { data: {files: photo},
+    return axiosInstance.delete('/photo',
+    { data: {files: photos},
       headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }
     })
 }
