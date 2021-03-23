@@ -5,7 +5,7 @@ import { getConfig, editConfig } from '../services/adminApiService'
 import Spinner from '../components/spinner'
 
 const AdminPage = ({ showMessage }) => {
-    const [config, setConfig] = useState({})
+    const [config, setConfig] = useState(null)
     const [loadingConfig, setLoadingConfig] = useState(true)
     const [assigned, setAssigned] = useState(0)
 
@@ -13,15 +13,19 @@ const AdminPage = ({ showMessage }) => {
         getConfig()
         .then(res => {
             setLoadingConfig(false)
-            setConfig(res.data[0])
-            setAssigned(res.data[0].default)
+            if(res.data[0]){
+              setConfig(res.data[0])
+              setAssigned(res.data[0].default)
+            }else {
+              showMessage("Create a config", "warning")
+            }
         })
         .catch((err) => showMessage(err.message, "error"))
 
     }
 
     const updateConfig = () => {
-        editConfig(assigned, config._id)
+        editConfig(assigned, config?._id)
         .then(() => showMessage("Udated!"))
         .catch(err => showMessage(err.message, "error"))
     }
@@ -45,24 +49,24 @@ const AdminPage = ({ showMessage }) => {
             <div className="alert alert-primary" role="alert">
             Configure available storage for user use.
             <br/>
-            Max value accept: {config.max} GB
+            Max value accept: {config?.max} GB
             <br/>
-            Min value accept: {config.min} GB
+            Min value accept: {config?.min} GB
             <br/>
-            Assigned: {config.default} GB
+            Assigned: {config?.default} GB
         </div>}
         <label className="mr-2">
           Storage value{" "}
         </label>
         <input
           className="form-control"
-          min={loadingConfig ? 0 : config.min}
+          min={loadingConfig ? 0 : config?.min}
           type="number"
-          max={loadingConfig ? 0 : config.max}
+          max={loadingConfig ? 0 : config?.max}
           value={assigned}
           onChange={(e) => setAssigned(parseInt(e.target.value))}
         />
-        <button type="button" disabled={config.default === assigned} 
+        <button type="button" disabled={config?.default === assigned  || !config} 
         className="btn btn-success btn-block my-3"
         onClick={updateConfig}>
             Save
