@@ -176,6 +176,7 @@ const Photos = ({ showMessage }) => {
               </button>
               <button
                 disabled={existRequest}
+                // Hacemos un boton para compartir la imagen
                 type="button"
                 className="btn btn-outline-success btn-sm ml-2"
               >
