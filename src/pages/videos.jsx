@@ -9,26 +9,23 @@ import { listVideos } from "../services/videoApiService";
 import { AppContext } from "../context/AppProvider";
 
 const Videos = ({ showMessage }) => {
-
-
-  const [videos, SetVideos] = useState([])
+  const [videos, SetVideos] = useState([]);
 
   const context = useContext(AppContext);
   const reloadFiles = context[8];
   const setReloadFiles = context[9];
   const [loadingVideos, setloadingVideos] = useState(true);
-  const [currentVideo, setCurrentVideo] = useState();
+  const [currentVideo, setCurrentVideo] = useState({});
   const handleSort = async (typeSort) => {
-    const sortFiles = await onSort(typeSort, [...videos])
-    SetVideos(sortFiles)
-  }
+    const sortFiles = await onSort(typeSort, [...videos]);
+    SetVideos(sortFiles);
+  };
 
   const handleSelecFile = (fileSelected) => {
     setCurrentVideo(fileSelected);
   };
 
   function getVideos() {
-
     listVideos()
       .then((res) => {
         const videos = res.data;
@@ -53,13 +50,10 @@ const Videos = ({ showMessage }) => {
     getVideos();
   }, [reloadFiles]);
 
-
   return (
     <div>
-
       <div className="d-flex flex-row justify-content-center mt-2">
-
-        {videos.length !== 0 && (
+        {videos.length !== 0 && currentVideo && (
           <Player
             autoPlay={videos[0].path !== currentVideo.path}
             fluid={false}
@@ -70,23 +64,21 @@ const Videos = ({ showMessage }) => {
             src={`${process.env.REACT_APP_GATEWAY_SERVICE_BASE_URL}/api/video/download/${currentVideo._id}`}
           />
         )}
-
-
+      </div>
+      <div className="mt-2">
         {videos.length !== 0 && (
           <Fragment>
             <h4 className="my-1 text-center mx-2">{currentVideo.name}</h4>
             <p className="text-muted text-center">Play list</p>
           </Fragment>
-        )
-        }
-
-          <FileComponent
-            loading={loadingVideos}
-            files={videos}
-            onSelectedFile={handleSelecFile}
-            onSort={handleSort}
-          />
+        )}
       </div>
+      <FileComponent
+        loading={loadingVideos}
+        files={videos}
+        onSelectedFile={handleSelecFile}
+        onSort={handleSort}
+      />
     </div>
   );
 };
