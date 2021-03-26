@@ -4,7 +4,7 @@ import { onSort } from '../util/sort'
 import WithMessage from "../hocs/withMessage";
 import WithAppLayout from "../layouts/appLayout";
 import FileComponent from "../components/file";
-import { useEffect, useState, useContext , Fragment} from "react";
+import { useEffect, useState, useContext, Fragment } from "react";
 import { download, removeVideos, listVideos, } from "../services/videoApiService";
 import { AppContext } from "../context/AppProvider";
 
@@ -12,7 +12,7 @@ const Videos = ({ showMessage }) => {
 
 
   const [videos, SetVideos] = useState([])
-  const [existRequest, setExistRequest] = useState(false);
+
   const context = useContext(AppContext);
   const reloadFiles = context[8];
   const setReloadFiles = context[9];
@@ -28,24 +28,22 @@ const Videos = ({ showMessage }) => {
   };
 
   function getVideos() {
-    setExistRequest(true);
+
     listVideos()
       .then((res) => {
         const videos = res.data;
         SetVideos(videos);
         setReloadFiles(false);
-        setCurrentVideo(null)
+
         if (videos.length != 0) {
           setCurrentVideo(videos[0]);
         } else {
           setCurrentVideo({});
         }
-        setExistRequest(false);
         setloadingVideos(false);
       })
       .catch((error) => {
         showMessage(error.message, "error");
-        setExistRequest(false);
         setReloadFiles(false);
         setloadingVideos(false);
       });
@@ -57,7 +55,7 @@ const Videos = ({ showMessage }) => {
 
   return (
     <div>
-      
+
       <div className="d-flex flex-row justify-content-center mt-2">
         {videos.length !== 0 && (
           <Player
@@ -72,30 +70,30 @@ const Videos = ({ showMessage }) => {
         )}
         {videos.length == 0 && (
           <Player
-          fluid={false}
-          width={window.screen.width * 0.7}
-          height={window.screen.height * 0.5}
-          playsInline
-          poster="/images/video_placeholder.png"
-        />
+            fluid={false}
+            width={window.screen.width * 0.7}
+            height={window.screen.height * 0.5}
+            playsInline
+            poster="/images/video_placeholder.png"
+          />
         )}
       </div>
       {videos.length !== 0 && (
-      <Fragment>
-      <h4 className="my-1 text-center mx-2">{currentVideo.name}</h4>
-      <p className="text-muted text-center">Play list</p>
-      </Fragment>
+        <Fragment>
+          <h4 className="my-1 text-center mx-2">{currentVideo.name}</h4>
+          <p className="text-muted text-center">Play list</p>
+        </Fragment>
       )
       }
 
-      
+
       {videos.length !== 0 && (
-      <FileComponent
-        loading={false}
-        files={videos}
-        onSelectedFile={handleSelecFile}
-        onSort={handleSort}
-      />
+        <FileComponent
+          loading={loadingVideos}
+          files={videos}
+          onSelectedFile={handleSelecFile}
+          onSort={handleSort}
+        />
       )}
     </div>
   );
