@@ -37,6 +37,13 @@ export const getFiles = async () => {
     return axiosInstance.get('/file', 
     { headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }})
 }
+//ARCHIVOS COMPARTIDOS
+export const getSharedFiles = async () => {
+    const { token } = await  getLocalSesion();
+    const axiosInstance = await getAxiosInstance()
+    return axiosInstance.get('/file/shared', 
+    { headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }})
+}
 
 export const getStorageUsed = async () => {
     const { token } = await  getLocalSesion();
