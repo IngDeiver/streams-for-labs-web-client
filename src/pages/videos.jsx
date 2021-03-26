@@ -4,11 +4,11 @@ import { onSort } from '../util/sort'
 import WithMessage from "../hocs/withMessage";
 import WithAppLayout from "../layouts/appLayout";
 import FileComponent from "../components/file";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext , Fragment} from "react";
 import { download, removeVideos, listVideos, } from "../services/videoApiService";
 import { AppContext } from "../context/AppProvider";
 
-const Videos = () => {
+const Videos = ({ showMessage }) => {
 
 
   const [videos, SetVideos] = useState([])
@@ -23,8 +23,6 @@ const Videos = () => {
     SetVideos(sortFiles)
   }
 
-
-
   const handleSelecFile = (fileSelected) => {
     setCurrentVideo(fileSelected);
   };
@@ -36,7 +34,8 @@ const Videos = () => {
         const videos = res.data;
         SetVideos(videos);
         setReloadFiles(false);
-        if (photos.length != 0) {
+        setCurrentVideo(null)
+        if (videos.length != 0) {
           setCurrentVideo(videos[0]);
         } else {
           setCurrentVideo({});
@@ -48,7 +47,7 @@ const Videos = () => {
         showMessage(error.message, "error");
         setExistRequest(false);
         setReloadFiles(false);
-        setLoadingVideos(false);
+        setloadingVideos(false);
       });
   }
 
@@ -56,66 +55,49 @@ const Videos = () => {
     getVideos();
   }, [reloadFiles]);
 
-  function onDownloadVideos() {
-    setExistRequest(true);
-    download(currentVideo._id)
-      .then((res) => {
-        const blob = res.data;
-        console.log(blob);
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", currentVideo.name);
-        link.click();
-        showMessage("Video downloaded!");
-        setExistRequest(false);
-      })
-      .catch((error) => {
-        showMessage(error.message, "error");
-        setExistRequest(false);
-      });
-  }
-
-  function onRemoveVideos() {
-    setExistRequest(true);
-    removeVideos([currentVideo._id])
-      .then((response) => {
-        showMessage("Video remove");
-        setExistRequest(false);
-        getVideos();
-      })
-      .catch((error) => {
-        showMessage(error.message, "error");
-        setExistRequest(false);
-      });
-  }
-
-  
-
-
-
   return (
-    <>
+    <div>
+      
       <div className="d-flex flex-row justify-content-center mt-2">
-        <Player
-          autoPlay={videos[0].path !== currentVideo.path}
+        {videos.length !== 0 && (
+          <Player
+            autoPlay={videos[0].path !== currentVideo.path}
+            fluid={false}
+            width={window.screen.width * 0.7}
+            height={window.screen.height * 0.5}
+            playsInline
+            poster="/images/video_placeholder.png"
+            src={currentVideo.path}
+          />
+        )}
+        {videos.length == 0 && (
+          <Player
           fluid={false}
           width={window.screen.width * 0.7}
           height={window.screen.height * 0.5}
           playsInline
           poster="/images/video_placeholder.png"
-          src={currentVideo.path}
         />
+        )}
       </div>
+      {videos.length !== 0 && (
+      <Fragment>
       <h4 className="my-1 text-center mx-2">{currentVideo.name}</h4>
       <p className="text-muted text-center">Play list</p>
+      </Fragment>
+      )
+      }
+
+      
+      {videos.length !== 0 && (
       <FileComponent
         loading={false}
         files={videos}
         onSelectedFile={handleSelecFile}
         onSort={handleSort}
       />
-    </>
+      )}
+    </div>
   );
 };
 

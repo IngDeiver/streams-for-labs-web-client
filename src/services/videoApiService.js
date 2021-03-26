@@ -14,22 +14,3 @@ export const listVideos = async () => {
         { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } })
 }
 
-export const download = async (videoId) => {
-    const { token } = await getLocalSesion();
-    const axiosInstance = await getAxiosInstance()
-    return axiosInstance.get(`/video/download/${videoId}`,
-        {
-            headers: { 'Authorization': `Bearer ${token}` },
-            responseType: 'blob'
-        })
-}
-
-export const removeVideos = async (video, isVideo = true) => {
-    const { token } = await getLocalSesion();
-    const axiosInstance = await getAxiosInstance()
-    return axiosInstance.delete(`${isVideo ? '/video' : '/photo'}`,
-        {
-            data: { files: video },
-            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
-        })
-}
