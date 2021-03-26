@@ -182,8 +182,8 @@ const File = ({
             {isSharedSection && (
               <div onClick={() => onSelectedFile ? onSelectedFile(file):'' } className="col-3 my-2">
                 {file.author.length > 25
-                  ? file.author.substring(0, 25) + "..."
-                  : file.author}
+                  ? file.author.username.substring(0, 25) + "..."
+                  : file.author.username}
               </div>
             )}
             <div className={`col-${isSharedSection ? "2" : "3"}`}>
