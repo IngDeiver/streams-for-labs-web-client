@@ -1,8 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import "../styles/fileComponent.css";
 import moment from "moment";
 import Spinner from "./spinner";
-import { download } from "../services/fileApiService";
+import { downloadFile } from "../services/fileApiService";
+import { downloadPhoto } from "../services/photoApiService";
+import { downloadVideo } from "../services/videoApiService";
 import WithMessage from "../hocs/withMessage";
 import { AppContext } from "../context/AppProvider";
 
@@ -57,10 +59,10 @@ const File = ({
   };
 
   const onDownload = (file) => {
-    download(file._id)
+    if(file.path.includes("/files/")){
+      downloadFile(file._id)
       .then((res) => {
         const blob = res.data;
-        console.log(blob);
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -69,6 +71,37 @@ const File = ({
         showMessage("File downloaded!");
       })
       .catch((err) => showMessage(err.message, "error"));
+    } else if(file.path.includes("/photos/")){
+      downloadPhoto(file._id)
+      .then((res) => {
+        const blob = res.data;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", file.name);
+        link.click();
+        showMessage("Photo downloaded!");
+      })
+      .catch((error) => {
+        showMessage(error.message, "error");
+      });
+    }
+    else {
+      downloadVideo(file._id)
+      .then((res) => {
+        const blob = res.data;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", file.name);
+        link.click();
+        showMessage("Video downloaded!");
+      })
+      .catch((error) => {
+        showMessage(error.message, "error");
+      });
+    }
+   
   };
 
   const handleCheckFile = (e, file) => {
@@ -79,7 +112,7 @@ const File = ({
     if (checked) {
       currentFilesToremove.push(file._id);
       SetFilesToRemove({
-        areVideos: file.path.includes("videos"),
+        areVideos: file.path.includes("/videos/"),
         data: currentFilesToremove,
       });
       setSelectingFilesToRemove(true);
@@ -149,8 +182,8 @@ const File = ({
             {isSharedSection && (
               <div onClick={() => onSelectedFile ? onSelectedFile(file):'' } className="col-3 my-2">
                 {file.author.length > 25
-                  ? file.author.substring(0, 25) + "..."
-                  : file.author}
+                  ? file.author.username.substring(0, 25) + "..."
+                  : file.author.username}
               </div>
             )}
             <div className={`col-${isSharedSection ? "2" : "3"}`}>

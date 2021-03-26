@@ -4,7 +4,7 @@ import ImageGallery from "react-image-gallery";
 import WithMessage from "../hocs/withMessage";
 import WithAppLayout from "../layouts/appLayout";
 import {
-  download,
+  downloadPhoto,
   removePhotos,
   listPhotos,
 } from "../services/photoApiService";
@@ -66,7 +66,7 @@ const Photos = ({ showMessage }) => {
 
   function onDownloadPhotos() {
     setExistRequest(true);
-    download(currentImage._id)
+    downloadPhoto(currentImage._id)
       .then((res) => {
         const blob = res.data;
         console.log(blob);

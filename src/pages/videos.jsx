@@ -1,11 +1,11 @@
-import React from "react";
 import { Player } from "video-react";
-import { onSort } from '../util/sort'
+import { onSort } from "../util/sort";
 import WithMessage from "../hocs/withMessage";
 import WithAppLayout from "../layouts/appLayout";
 import FileComponent from "../components/file";
+
 import { useEffect, useState, useContext, Fragment } from "react";
-import { download, removeVideos, listVideos, } from "../services/videoApiService";
+import { listVideos } from "../services/videoApiService";
 import { AppContext } from "../context/AppProvider";
 
 const Videos = ({ showMessage }) => {
@@ -53,10 +53,12 @@ const Videos = ({ showMessage }) => {
     getVideos();
   }, [reloadFiles]);
 
+
   return (
     <div>
 
       <div className="d-flex flex-row justify-content-center mt-2">
+
         {videos.length !== 0 && (
           <Player
             autoPlay={videos[0].path !== currentVideo.path}
@@ -65,36 +67,26 @@ const Videos = ({ showMessage }) => {
             height={window.screen.height * 0.5}
             playsInline
             poster="/images/video_placeholder.png"
-            src={currentVideo.path}
+            src={`${process.env.REACT_APP_GATEWAY_SERVICE_BASE_URL}/api/video/download/${currentVideo._id}`}
           />
         )}
-        {videos.length == 0 && (
-          <Player
-            fluid={false}
-            width={window.screen.width * 0.7}
-            height={window.screen.height * 0.5}
-            playsInline
-            poster="/images/video_placeholder.png"
+
+
+        {videos.length !== 0 && (
+          <Fragment>
+            <h4 className="my-1 text-center mx-2">{currentVideo.name}</h4>
+            <p className="text-muted text-center">Play list</p>
+          </Fragment>
+        )
+        }
+
+          <FileComponent
+            loading={loadingVideos}
+            files={videos}
+            onSelectedFile={handleSelecFile}
+            onSort={handleSort}
           />
-        )}
       </div>
-      {videos.length !== 0 && (
-        <Fragment>
-          <h4 className="my-1 text-center mx-2">{currentVideo.name}</h4>
-          <p className="text-muted text-center">Play list</p>
-        </Fragment>
-      )
-      }
-
-
-      {videos.length !== 0 && (
-        <FileComponent
-          loading={loadingVideos}
-          files={videos}
-          onSelectedFile={handleSelecFile}
-          onSort={handleSort}
-        />
-      )}
     </div>
   );
 };

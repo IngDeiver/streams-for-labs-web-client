@@ -13,7 +13,13 @@ const AdminLoginButtom = ({ disabled, showMessage }) => {
         setAdminSesion(user.data);
         window.location.replace("/admin");
       })
-      .catch(() => showMessage("Error al iniciar sesión", "error"));
+      .catch((err) => {
+        if(err.response && err.response.status == 401 ){
+          showMessage(`Credentials error`, "error")
+        }else{
+          showMessage(`Error al iniciar sesión:${err.message}`, "error")
+        }
+      });
   };
 
   return (

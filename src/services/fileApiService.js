@@ -22,7 +22,7 @@ export const upload = async (formData, onUploadProgress) => {
     onUploadProgress})
 }
 
-export const download = async (fileId) => {
+export const downloadFile = async (fileId) => {
     const { token } = await  getLocalSesion();
     const axiosInstance = await getAxiosInstance()
     return axiosInstance.get(`/file/${fileId}`, 
@@ -35,6 +35,13 @@ export const getFiles = async () => {
     const { token } = await  getLocalSesion();
     const axiosInstance = await getAxiosInstance()
     return axiosInstance.get('/file', 
+    { headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }})
+}
+//ARCHIVOS COMPARTIDOS
+export const getSharedFiles = async () => {
+    const { token } = await  getLocalSesion();
+    const axiosInstance = await getAxiosInstance()
+    return axiosInstance.get('/file/shared', 
     { headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }})
 }
 
@@ -52,10 +59,10 @@ export const getMaxStorageAvailable = async () => {
     { headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }})
 }
 
-export const removeFiles = async (files, isVideo=false) => {
+export const removeFiles = async (files) => {
     const { token } = await  getLocalSesion();
     const axiosInstance = await getAxiosInstance()
-    return axiosInstance.delete(`${isVideo ? '/video': '/file'}`,
+    return axiosInstance.delete('/file',
     { data: {files},
       headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }
     })

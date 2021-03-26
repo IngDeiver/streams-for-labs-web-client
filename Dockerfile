@@ -11,9 +11,9 @@ RUN npm install
 # Bundle app source
 COPY ./ /app/
 
-ENV REACT_APP_VAULT_HOST=http://streamsforlab3.bucaramanga.upb.edu.co
+ENV REACT_APP_VAULT_HOST=https://streamsforlab3.bucaramanga.upb.edu.co
 ENV REACT_APP_VAULT_TOKEN=s.svTh5haBOLUE37V7sjrFKABm
-ENV REACT_APP_GATEWAY_SERVICE_BASE_URL=http://streamsforlab.gateway.bucaramanga.upb.edu.co
+ENV REACT_APP_GATEWAY_SERVICE_BASE_URL=https://streamsforlab.gateway.bucaramanga.upb.edu.co
 ENV REACT_APP_VAULT_SECRET_ENV_URI=/v1/kv/env
 ENV REACT_APP_VAULT_SECRET_AZURE_URI=/v1/kv/azure
 ENV REACT_APP_VAULT_SECRET_GOOGLE_URI=/v1/kv/google
