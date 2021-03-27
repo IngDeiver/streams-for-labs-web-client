@@ -13,12 +13,14 @@ const getAxiosInstance =  () => {
 }
 
 
-export const upload = async (formData, onUploadProgress) => {
+export const upload = async (formData, onUploadProgress, cancelToken) => {
     const { token } = await  getLocalSesion();
     console.log(token);
     const axiosInstance = await getAxiosInstance()
     return axiosInstance.post('/file', formData, 
-    { headers: {...multipartHeader, 'Authorization': `Bearer ${token}` },
+    { cancelToken,
+      headers: {...multipartHeader, 'Authorization': `Bearer ${token}`
+    },
     onUploadProgress})
 }
 

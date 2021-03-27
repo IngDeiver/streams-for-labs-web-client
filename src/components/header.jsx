@@ -9,6 +9,7 @@ import { removeFiles } from "../services/fileApiService";
 import { removeVideos } from "../services/videoApiService";
 import { getStorageUsed } from "../services/fileApiService";
 import { AppContext } from "../context/AppProvider";
+import axios from "axios";
 const GB = 1000000000; //numero de bytes que tiene 1GB
 
 const Header = ({ noIsAdminSection = true, showMessage }) => {
@@ -19,6 +20,8 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
   const setSelectingFilesToRemove = context[5];
   const filesToRemove = context[6];
   const setReloadFiles = context[9];
+  const [allowCancelUpload, setAllowCancelUpload] = useState(false)
+  const cancelSource = react.useRef(null)
 
   const onUploadProgress = (progressEvent) => {
     const percentCompleted = Math.round(
@@ -55,7 +58,6 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
         // Get max user storage (GB)
         .then((res) => {
           const maxStorage = res.data.maxStoraged;
-          console.log("Max: ", maxStorage);
           resolve(maxStorage);
         })
         .catch((err) => reject(err));
@@ -68,7 +70,6 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
       getStorageUsed()
         // Obtiene el espacio de alamacenamiento ocupado por el usuario
         .then((res) => {
-          console.log("storageUsed: ", res.data.storageUsed);
           resolve(res.data.storageUsed / GB);
         })
         .catch((err) => reject(err));
@@ -99,7 +100,13 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
     }).catch((err) => showMessage(err.message, "error"));
   };
 
+ const  handleCancel = () => {
+  setUploading(false)
+  cancelSource.current.cancel('Operation canceled by the user.')
+}
+
   const handleFile = (e) => {
+    setAllowCancelUpload(false)
     const file = e.target.files[0];
     if (file) {
       setProgress("0%");
@@ -111,23 +118,33 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
           if (haveStorage) {
             const formData = new FormData();
             formData.append("file", file);
-            console.log(formData);
-            upload(formData, onUploadProgress)
+
+            cancelSource.current = axios.CancelToken.source()
+            setAllowCancelUpload(true)
+            upload(formData, onUploadProgress, cancelSource.current.token )
               .then((res) => {
-                console.log(res);
                 setUploading(false);
                 showMessage("File uploaded!");
                 setReloadFiles(true);
+                setAllowCancelUpload(false)
               })
-              .catch((err) => {
-                console.log(err);
-                setUploading(false);
-                showMessage(err.message, "error");
+              .catch(function (thrown) {
+                if (axios.isCancel(thrown)) {
+                  showMessage('Upload canceled', 'warning')
+                  setAllowCancelUpload(false)
+                } else {
+                  // handle error
+                  console.error(thrown);
+                  setUploading(false);
+                  showMessage(thrown.message, "error");
+                  setAllowCancelUpload(false)
+                }
+               
               });
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
           setUploading(false);
           showMessage(err.message, "error");
         });
@@ -152,7 +169,7 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
                 <li className="nav-item mr-2">
                   <button
                     className="btn btn-outline-secondary btn-sm mt-1"
-                    onClick={() => setSelectingFilesToRemove(false)}
+                    onClick={() =>setSelectingFilesToRemove(false)}
                   >
                     Cancel
                   </button>
@@ -171,7 +188,14 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
                     className="inputfile"
                   />
                   {uploading ? (
-                    <p className="mt-2 mr-2">{progress}</p>
+                      <button
+                        className="btn btn-outline-danger btn-sm mt-1"
+                        onClick={handleCancel}
+                        type="button"
+                        disabled={!allowCancelUpload}
+                      >
+                        {progress} :  Cancel
+                      </button>
                   ) : (
                     <>
                       {!selectingFilesToRemove && (
