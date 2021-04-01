@@ -22,6 +22,15 @@ export const downloadPhoto = async (photoId) => {
     })
 }
 
+export const sharePhoto = async (photoId) => {
+    const { token } = await  getLocalSesion();
+    const axiosInstance = await getAxiosInstance()
+    return axiosInstance.get(`/photo/share/${photoId}`, 
+        { headers: {'Authorization': `Bearer ${token}` },
+        responseType: 'blob'
+    })
+}
+
 export const removePhotos = async (photos) => {
     const { token } = await  getLocalSesion();
     const axiosInstance = await getAxiosInstance()

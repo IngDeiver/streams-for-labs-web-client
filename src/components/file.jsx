@@ -1,12 +1,17 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect,useState } from "react";
 import "../styles/fileComponent.css";
 import moment from "moment";
 import Spinner from "./spinner";
 import { downloadFile } from "../services/fileApiService";
+import  { shareFile}  from "../services/fileApiService";
 import { downloadPhoto } from "../services/photoApiService";
+import { sharePhoto } from "../services/photoApiService";
 import { downloadVideo } from "../services/videoApiService";
+import { shareVideo } from "../services/videoApiService";
 import WithMessage from "../hocs/withMessage";
 import { AppContext } from "../context/AppProvider";
+import  { Modal } from './Modal'
+
 
 const File = ({
   loading = true,
@@ -23,6 +28,12 @@ const File = ({
   const filesToRemove = context[6];
   const SetFilesToRemove = context[7];
 
+  const [showModal, setShowModal] = useState(false);
+
+  const openModal = () => {
+    setShowModal(prev => !prev);
+  };
+
  
   useEffect(() => {
     // Remove files from lis to remove
@@ -33,11 +44,15 @@ const File = ({
         checkboxes[i].checked = false;
       }
     }
-  }, [selectingFilesToRemove, files]);
+  }, [selectingFilesToRemove, files,showModal]);
 
   const onShared = (file) => {
 
+
   }
+
+  
+
 
   const calSize = (bytes) => {
     const GB = 1000000000; //numero de bytes que tiene 1GB
@@ -57,6 +72,55 @@ const File = ({
     const upload_at = moment(date).format(format);
     return moment(upload_at, format).fromNow();
   };
+
+
+
+  const onShare = (file) => {
+    if(file.path.includes("/files/")){
+      shareFile(file._id)
+      .then((res) => {
+        const blob = res.data;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("share", file.name);
+        link.click();
+        showMessage("File shared!");
+      })
+      .catch((err) => showMessage(err.message, "error"));
+    } else if(file.path.includes("/photos/")){
+      sharePhoto(file._id)
+      .then((res) => {
+        const blob = res.data;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("share", file.name);
+        link.click();
+        showMessage("Photo shared!");
+      })
+      .catch((error) => {
+        showMessage(error.message, "error");
+      });
+    }
+    else {
+      shareVideo(file._id)
+      .then((res) => {
+        const blob = res.data;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("share", file.name);
+        link.click();
+        showMessage("Video shared!");
+      })
+      .catch((error) => {
+        showMessage(error.message, "error");
+      });
+    }
+   
+  };
+
 
   const onDownload = (file) => {
     if(file.path.includes("/files/")){
@@ -211,8 +275,9 @@ const File = ({
                     {!isSharedSection && (
                       <button
                         className="dropdown-item btn btn-link"
-                        onClick={() => onShared(file)}
+                        data-toggle="modal" data-target="#exampleModal"
                       >
+                       
                         <i className="fas fa-share-alt"></i> Share
                       </button>
                     )}
@@ -220,6 +285,7 @@ const File = ({
                 </div>
               </div>
             </div>
+            <Modal> showModal={showModal} setShowModal = {setShowModal}</Modal>
           </div>
         ))}
 
