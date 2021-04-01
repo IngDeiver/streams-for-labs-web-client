@@ -17,6 +17,7 @@ ENV REACT_APP_GATEWAY_SERVICE_BASE_URL=https://streamsforlab.bucaramanga.upb.edu
 ENV REACT_APP_VAULT_SECRET_ENV_URI=/v1/kv/env
 ENV REACT_APP_VAULT_SECRET_AZURE_URI=/v1/kv/azure
 ENV REACT_APP_VAULT_SECRET_GOOGLE_URI=/v1/kv/google
+ENV REACT_APP_VIDEO_HOST=https://streamsforlab2.bucaramanga.upb.edu.co/video
 
 RUN npm run build
 

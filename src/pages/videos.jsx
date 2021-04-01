@@ -54,7 +54,7 @@ const Videos = ({ showMessage }) => {
     <div>
       <div className="d-flex flex-row justify-content-center mt-2">
         {videos.length !== 0 && currentVideo && (
-         <ReactPlayer controls url={`https://streamsforlab2.bucaramanga.upb.edu.co/api/video/download/${currentVideo._id}`} />
+         <ReactPlayer controls url={`${process.env.REACT_APP_VIDEO_HOST}/api/video/download/${currentVideo._id}`} />
         )}
       </div>
       <div className="mt-2">
