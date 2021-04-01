@@ -13,12 +13,14 @@ const getAxiosInstance =  () => {
 }
 
 
-export const upload = async (formData, onUploadProgress) => {
+export const upload = async (formData, onUploadProgress, cancelToken) => {
     const { token } = await  getLocalSesion();
     console.log(token);
     const axiosInstance = await getAxiosInstance()
     return axiosInstance.post('/file', formData, 
-    { headers: {...multipartHeader, 'Authorization': `Bearer ${token}` },
+    { cancelToken,
+      headers: {...multipartHeader, 'Authorization': `Bearer ${token}`
+    },
     onUploadProgress})
 }
 
@@ -47,6 +49,13 @@ export const getFiles = async () => {
     const { token } = await  getLocalSesion();
     const axiosInstance = await getAxiosInstance()
     return axiosInstance.get('/file', 
+    { headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }})
+}
+//ARCHIVOS COMPARTIDOS
+export const getSharedFiles = async () => {
+    const { token } = await  getLocalSesion();
+    const axiosInstance = await getAxiosInstance()
+    return axiosInstance.get('/file/shared', 
     { headers: {'Authorization': `Bearer ${token}`, 'Content-Type' : 'application/json' }})
 }
 

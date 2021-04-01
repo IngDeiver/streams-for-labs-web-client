@@ -1,77 +1,77 @@
-import React, { useContext, useEffect } from "react";
-import { Player } from "video-react";
 import { onSort } from "../util/sort";
 import WithMessage from "../hocs/withMessage";
 import WithAppLayout from "../layouts/appLayout";
 import FileComponent from "../components/file";
-import { useState } from "react";
+import { useEffect, useState, useContext, Fragment } from "react";
+import { listVideos } from "../services/videoApiService";
 import { AppContext } from "../context/AppProvider";
+import Video from '../components/video'
 
-const Videos = () => {
-  const VIDEO_API = 'api/video/download'
+
+const Videos = ({ showMessage }) => {
+  const [videos, SetVideos] = useState([]);
+
   const context = useContext(AppContext);
   const reloadFiles = context[8];
   const setReloadFiles = context[9];
-
-  const [videos, SetVideos] = useState([
-    {
-      _id: "6058fe415a35886c25a826fa",
-      author: "Pepito Pérez",
-      name: "Video.mp4",
-      path:"/home/streams-for-lab.co/deiver-guerra-carrascal/videos/Video.mp4",
-      shared_users: [],
-      upload_at: "2022-02-25T03:39:06.955Z",
-      weight: 23094,
-    },
-    {
-      _id: "605906de5a35886c25a826fb",
-      author: "Julanito",
-      name: "Video2.pm4",
-      path:"/home/streams-for-lab.co/deiver-guerra-carrascal/videos/Video2.mp4",
-      shared_users: [],
-      upload_at: "2021-02-25T03:39:06.955Z",
-      weight: 456094,
-    },
-  ]);
-
+  const [loadingVideos, setloadingVideos] = useState(true);
+  const [currentVideo, setCurrentVideo] = useState({});
   const handleSort = async (typeSort) => {
     const sortFiles = await onSort(typeSort, [...videos]);
     SetVideos(sortFiles);
   };
 
-  const [currentVideo, setCurrentVideo] = useState(videos[0]);
-
   const handleSelecFile = (fileSelected) => {
     setCurrentVideo(fileSelected);
   };
 
+  function getVideos() {
+    listVideos()
+      .then((res) => {
+        const videos = res.data;
+        SetVideos(videos);
+        setReloadFiles(false);
+
+        if (videos.length != 0) {
+          setCurrentVideo(videos[0]);
+        } else {
+          setCurrentVideo({});
+        }
+        setloadingVideos(false);
+      })
+      .catch((error) => {
+        showMessage(error.message, "error");
+        setReloadFiles(false);
+        setloadingVideos(false);
+      });
+  }
+
   useEffect(() => {
-    // list videos
-    // remember use setReloadFiles
+    getVideos();
   }, [reloadFiles]);
-  
+
   return (
-    <>
+    <div>
       <div className="d-flex flex-row justify-content-center mt-2">
-        <Player
-          autoPlay={videos[0].path !== currentVideo.path}
-          fluid={false}
-          width={window.screen.width * 0.7}
-          height={window.screen.height * 0.5}
-          playsInline
-          poster="/images/video_placeholder.png"
-          src={`${process.env.REACT_APP_GATEWAY_SERVICE_BASE_URL}/${VIDEO_API}/${currentVideo._id}`}
-        />
+        {videos.length !== 0 && currentVideo && (
+         <Video url = {`${process.env.REACT_APP_VIDEO_HOST}/api/video/download/${currentVideo._id}`}/>
+        )}
       </div>
-      <h4 className="my-1 text-center mx-2">{currentVideo.name}</h4>
-      <p className="text-muted text-center">Play list</p>
+      <div className="mt-2">
+        {videos.length !== 0 && (
+          <Fragment>
+            <h4 className="my-1 text-center mx-2">{currentVideo.name}</h4>
+            <p className="text-muted text-center">Play list</p>
+          </Fragment>
+        )}
+      </div>
       <FileComponent
-        loading={false}
+        loading={loadingVideos}
         files={videos}
         onSelectedFile={handleSelecFile}
         onSort={handleSort}
       />
-    </>
+    </div>
   );
 };
 
