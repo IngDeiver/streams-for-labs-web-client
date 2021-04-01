@@ -1,12 +1,12 @@
-import { Player } from "video-react";
 import { onSort } from "../util/sort";
 import WithMessage from "../hocs/withMessage";
 import WithAppLayout from "../layouts/appLayout";
 import FileComponent from "../components/file";
-import ReactPlayer from 'react-player'
 import { useEffect, useState, useContext, Fragment } from "react";
 import { listVideos } from "../services/videoApiService";
 import { AppContext } from "../context/AppProvider";
+import Video from '../components/video'
+
 
 const Videos = ({ showMessage }) => {
   const [videos, SetVideos] = useState([]);
@@ -54,7 +54,7 @@ const Videos = ({ showMessage }) => {
     <div>
       <div className="d-flex flex-row justify-content-center mt-2">
         {videos.length !== 0 && currentVideo && (
-         <ReactPlayer controls url={`${process.env.REACT_APP_VIDEO_HOST}/api/video/download/${currentVideo._id}`} />
+         <Video url = {`${process.env.REACT_APP_VIDEO_HOST}/api/video/download/${currentVideo._id}`}/>
         )}
       </div>
       <div className="mt-2">
