@@ -3,7 +3,7 @@ import { onSort } from "../util/sort";
 import WithMessage from "../hocs/withMessage";
 import WithAppLayout from "../layouts/appLayout";
 import FileComponent from "../components/file";
-
+import ReactPlayer from 'react-player'
 import { useEffect, useState, useContext, Fragment } from "react";
 import { listVideos } from "../services/videoApiService";
 import { AppContext } from "../context/AppProvider";
@@ -54,15 +54,7 @@ const Videos = ({ showMessage }) => {
     <div>
       <div className="d-flex flex-row justify-content-center mt-2">
         {videos.length !== 0 && currentVideo && (
-          <Player
-            autoPlay={videos[0].path !== currentVideo.path}
-            fluid={false}
-            width={window.screen.width * 0.7}
-            height={window.screen.height * 0.5}
-            playsInline
-            poster="/images/video_placeholder.png"
-            src={`${process.env.REACT_APP_GATEWAY_SERVICE_BASE_URL}/api/video/download/${currentVideo._id}`}
-          />
+         <ReactPlayer controls url={`https://streamsforlab2.bucaramanga.upb.edu.co/api/video/download/${currentVideo._id}`} />
         )}
       </div>
       <div className="mt-2">
