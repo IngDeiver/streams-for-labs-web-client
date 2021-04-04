@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import react, { useContext, useState } from "react";
+import react, { useContext, useState, useEffect } from "react";
 import { logout } from "../util/auth";
 import "../styles/header.css";
 import { upload } from "../services/fileApiService";
@@ -10,6 +10,7 @@ import { removeVideos } from "../services/videoApiService";
 import { getStorageUsed } from "../services/fileApiService";
 import { AppContext } from "../context/AppProvider";
 import axios from "axios";
+import { useLocation } from 'react-router-dom'
 const GB = 1000000000; //numero de bytes que tiene 1GB
 
 const Header = ({ noIsAdminSection = true, showMessage }) => {
@@ -22,7 +23,10 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
   const setReloadFiles = context[9];
   const [allowCancelUpload, setAllowCancelUpload] = useState(false)
   const cancelSource = react.useRef(null)
+  const location = useLocation()
 
+  useEffect(() => {
+  }, [location]);
   const onUploadProgress = (progressEvent) => {
     const percentCompleted = Math.round(
       (progressEvent.loaded * 100) / progressEvent.total
@@ -32,6 +36,7 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
 
   const onRemove = () => {
     // si son videos
+    console.log(filesToRemove);
     if (filesToRemove.areVideos) {
       removeVideos(filesToRemove.data)
         .then(() => {
@@ -119,12 +124,18 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
             const formData = new FormData();
             formData.append("file", file);
 
+            let type = "File"
+            if(file.type.includes("video")) type = "Video"
+            else if(file.type.includes("image")) type = "Photo"
+      
+
             cancelSource.current = axios.CancelToken.source()
             setAllowCancelUpload(true)
             upload(formData, onUploadProgress, cancelSource.current.token )
               .then((res) => {
                 setUploading(false);
-                showMessage("File uploaded!");
+                console.log();
+                showMessage(`${type} uploaded!`);
                 setReloadFiles(true);
                 setAllowCancelUpload(false)
               })
@@ -198,7 +209,7 @@ const Header = ({ noIsAdminSection = true, showMessage }) => {
                       </button>
                   ) : (
                     <>
-                      {!selectingFilesToRemove && (
+                      {!selectingFilesToRemove && (location.pathname === '/' || location.pathname === '/videos' || location.pathname === '/photos') && (
                         <label for="file">
                           <i className="fas fa-file-upload"></i> Upload
                         </label>

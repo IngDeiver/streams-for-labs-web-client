@@ -13,7 +13,7 @@ const Video = ({ url }) => {
   }, [url]);
 
   return (
-    <video width="50%" height="50%" controls ref={videoRef}>
+    <video width="60%" height="50%" controls ref={videoRef}>
       <source src={url} />
     </video>
   );

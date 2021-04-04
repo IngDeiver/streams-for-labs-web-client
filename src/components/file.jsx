@@ -15,11 +15,13 @@ import  { Modal } from './Modal'
 
 const File = ({
   loading = true,
+  dirs = [],
   files = [],
   isSharedSection = false,
   onSelectedFile,
   showMessage,
-  onSort
+  onSort,
+  backDirectory,
 }) => {
 
   const context = useContext(AppContext);
@@ -27,32 +29,24 @@ const File = ({
   const setSelectingFilesToRemove = context[5];
   const filesToRemove = context[6];
   const SetFilesToRemove = context[7];
-
-  const [showModal, setShowModal] = useState(false);
-
-  const openModal = () => {
-    setShowModal(prev => !prev);
-  };
+  const arrowStyle = { fontSize:30, color:"#3498db"}
+ 
 
  
   useEffect(() => {
     // Remove files from lis to remove
+    console.log("File<----");
     if (!selectingFilesToRemove) {
+      console.log("NOO");
       SetFilesToRemove({ areVideos: false, data: [] });
       const checkboxes = document.getElementsByClassName("form-check-input");
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = false;
       }
     }
-  }, [selectingFilesToRemove, files,showModal]);
+  }, [selectingFilesToRemove]);
 
-  const onShared = (file) => {
-
-
-  }
-
-  
-
+ 
 
   const calSize = (bytes) => {
     const GB = 1000000000; //numero de bytes que tiene 1GB
@@ -123,7 +117,9 @@ const File = ({
 
 
   const onDownload = (file) => {
-    if(file.path.includes("/files/")){
+    showMessage("Download started")
+    
+    if(file.type === 'file'){
       downloadFile(file._id)
       .then((res) => {
         const blob = res.data;
@@ -135,7 +131,7 @@ const File = ({
         showMessage("File downloaded!");
       })
       .catch((err) => showMessage(err.message, "error"));
-    } else if(file.path.includes("/photos/")){
+    } else if(file.type === 'photo'){
       downloadPhoto(file._id)
       .then((res) => {
         const blob = res.data;
@@ -176,7 +172,7 @@ const File = ({
     if (checked) {
       currentFilesToremove.push(file._id);
       SetFilesToRemove({
-        areVideos: file.path.includes("/videos/"),
+        areVideos: file.type === 'video',
         data: currentFilesToremove,
       });
       setSelectingFilesToRemove(true);
@@ -184,7 +180,7 @@ const File = ({
       // Remove file from remove list
       currentFilesToremove.splice(currentFilesToremove.indexOf(file), 1);
       SetFilesToRemove({
-        areVideos: file.path.includes("videos"),
+        areVideos: file.type === 'video',
         data: currentFilesToremove,
       });
     }
@@ -196,6 +192,19 @@ const File = ({
 
   return (
     <div className="container-fluid">
+
+      { files.length === 0 && dirs.length !== 0 && 
+        <div className="my-2">
+          <button onClick={backDirectory} disabled = {dirs.dir === 'Home'}  className =" btn btn-default">
+            <i  style={ arrowStyle } class="fas fa-arrow-circle-left"></i>
+          </button>
+        {/* <button onClick={nextDirectory} disabled = {currentDir === dirs.length } className =" btn btn-default">
+          <i style={ arrowStyle } class="fas fa-arrow-circle-right"></i>
+        </button> */}
+        | { dirs.dir}
+        </div>
+      }
+
       <div className="row border py-2 mx-3">
         <div className={`col-${isSharedSection ? "3" : "5"}`}>
           <span onClick={() => onSort("name")} className="sort">
@@ -203,7 +212,7 @@ const File = ({
           </span>
         </div>
         <div className="sort" className="col-2">
-          <span onClick={() => onSort("date")} className="sort">
+          <span onClick={dirs.length === 0 ? () => onSort("date"): null} className="sort">
             Date <i className="fas fa-caret-down"></i>
           </span>
         </div>
@@ -217,84 +226,173 @@ const File = ({
         )}
       </div>
       {!loading &&
-        files.map((file, key) => (
-          <div key={key} className="row mx-3 file container">
-            <div
-            onClick={() => onSelectedFile ? onSelectedFile(file):'' }
-              className={`my-2 col-${isSharedSection ? "3" : "5"} form-check`}
-            >
-              {!isSharedSection && (
-                <input
-                  onChange={(e) => handleCheckFile(e, file)}
-                  className="form-check-input"
-                  type="checkbox"
-                />
-              )}
-              <label className="form-check-label">
-                <i className="far fa-folder mx-2"></i>
-                {file.name.length > 25
-                  ? file.name.substring(0, 25) + "..."
-                  : file.name}
-              </label>
-            </div>
-            <div onClick={() => onSelectedFile ? onSelectedFile(file):'' } className="col-2 my-2">
-              {formatDate(file.upload_at)}
-            </div>
-            <div onClick={() => onSelectedFile ? onSelectedFile(file):'' } className="col-2 my-2">
-              {calSize(file.weight)}
-            </div>
-            {isSharedSection && (
-              <div onClick={() => onSelectedFile ? onSelectedFile(file):'' } className="col-3 my-2">
-                {file.author.length > 25
-                  ? file.author.username.substring(0, 25) + "..."
-                  : file.author.username}
-              </div>
-            )}
-            <div className={`col-${isSharedSection ? "2" : "3"}`}>
-              <div className="d-flex flex-row-reverse ">
-                <div className="btn-group dropleft">
-                  <button
-                    type="button"
-                    className="btn btn-default dropdown-toggle"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <i
-                      style={{ fontSize: 20 }}
-                      className="fas fa-chevron-circle-down dropdown show ml-auto"
-                    ></i>
-                  </button>
-                  <div className="dropdown-menu">
-                    <button
-                      onClick={() => onDownload(file)}
-                      className="dropdown-item  btn btn-link"
-                    >
-                      <i className="fas fa-cloud-download-alt"></i> Download
-                    </button>
-                    {!isSharedSection && (
+        <div>
+          { files.length != 0  && (
+             files.map((file, key) => (
+              <div key={key} className="row mx-3 file container">
+                <div
+                onClick={() => onSelectedFile ? onSelectedFile(file):'' }
+                  className={`my-2 col-${isSharedSection ? "3" : "5"} form-check`}
+                >
+                  {!isSharedSection && !file.sync && (
+                    <input
+                      onChange={(e) => handleCheckFile(e, file)}
+                      className="form-check-input"
+                      type="checkbox"
+                    />
+                  )}
+                  <label className="form-check-label">
+                  <i class="far fa-file-alt mr-2"></i>
+                    {file.name.length > 25
+                      ? file.name.substring(0, 25) + "..."
+                      : file.name}
+                  </label>
+                </div>
+                <div onClick={() => onSelectedFile ? onSelectedFile(file):'' } className="col-2 my-2">
+                  {formatDate(file.upload_at)}
+                </div>
+                <div onClick={() => onSelectedFile ? onSelectedFile(file):'' } className="col-2 my-2">
+                  {calSize(file.weight)}
+                </div>
+                {isSharedSection && (
+                  <div onClick={() => onSelectedFile ? onSelectedFile(file):'' } className="col-3 my-2">
+                    {file.author.length > 25
+                      ? file.author.username.substring(0, 25) + "..."
+                      : file.author.username}
+                  </div>
+                )}
+                <div className={`col-${isSharedSection ? "2" : "3"}`}>
+                  <div className="d-flex flex-row-reverse ">
+                    <div className="btn-group dropleft">
                       <button
-                        className="dropdown-item btn btn-link"
-                        data-toggle="modal" data-target="#exampleModal"
+                        type="button"
+                        className="btn btn-default dropdown-toggle"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
                       >
-                       
-                        <i className="fas fa-share-alt"></i> Share
+                        <i
+                          style={{ fontSize: 20 }}
+                          className="fas fa-chevron-circle-down dropdown show ml-auto"
+                        ></i>
                       </button>
-                    )}
+                      <div className="dropdown-menu">
+                        <button
+                          onClick={() => onDownload(file)}
+                          className="dropdown-item  btn btn-link"
+                        >
+                          <i className="fas fa-cloud-download-alt"></i> Download
+                        </button>
+                        {!isSharedSection && (
+                          <button
+                            className="dropdown-item btn btn-link"
+                            data-toggle="modal" data-target="#exampleModal"
+                          >
+                           
+                            <i className="fas fa-share-alt"></i> Share
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
+                <Modal/>
               </div>
-            </div>
-            <Modal> showModal={showModal} setShowModal = {setShowModal}</Modal>
-          </div>
-        ))}
+            )) )
+          }
+
+          { dirs.children?.length != 0 && (
+            dirs.children?.map((dir, key) => (
+              <div key = {key} className="row mx-3 file container">
+                <div
+                onClick={() => onSelectedFile && dir.children.length != 0 ? onSelectedFile(dir):'' }
+                  className={`my-2 col-${isSharedSection ? "3" : "5"} form-check`}
+                >
+                  {dir.children.length == 0 && !dir.file.sync && (
+                    <input
+                      onChange={(e) => handleCheckFile(e, dir.file)}
+                      className="form-check-input"
+                      type="checkbox"
+                    />
+                  )}
+                  <label className="form-check-label">
+                    {dir.children.length != 0 && <i class="far fa-folder mr-2"></i> }
+
+                    {dir.children.length === 0 && (
+                      <>
+                        {dir.file.type === 'photo' && <i class="far fa-file-image mr-2"></i>}
+                        {dir.file.type === 'video' && <i class="far fa-file-video mr-2"></i>}
+                        {dir.file.type === 'file' && <i class="far fa-file-alt mr-2"></i>}
+                      </>
+                    )}
+
+                    {
+                      dir.children.length === 0 ? (
+                        dir.file.name.length > 25
+                      ? dir.file.name.substring(0, 25) + "..."
+                      : dir.file.name
+                      ):dir.dir
+                    }
+                  </label>
+                </div>
+                <div onClick={() => onSelectedFile && dir.children.length != 0  ? onSelectedFile(dir):'' } className="col-2 my-2">
+                  {dir.children.length == 0 ? formatDate(dir.file.upload_at): "Without date"}
+                </div>
+                <div onClick={() => onSelectedFile && dir.children.length != 0  ? onSelectedFile(dir):'' } className="col-2 my-2">
+                  {dir.children.length == 0 ? calSize(dir.file.weight): dir.children.length + " items" }
+                </div>
+
+                <div className={`col-${isSharedSection ? "2" : "3"}`}>
+                  <div className="d-flex flex-row-reverse ">
+                  { dir.children.length == 0  && (
+                    <div className="btn-group dropleft">
+                      <button
+                        type="button"
+                        className="btn btn-default dropdown-toggle"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
+                        <i
+                          style={{ fontSize: 20 }}
+                          className="fas fa-chevron-circle-down dropdown show ml-auto"
+                        ></i>
+                      </button>
+                      
+                      <div className="dropdown-menu">
+                         <>
+                          <button
+                          onClick={() => onDownload(dir.file)}
+                          className="dropdown-item  btn btn-link"
+                          >
+                          <i className="fas fa-cloud-download-alt"></i> Download
+                          </button>
+                          <button
+                            className="dropdown-item btn btn-link"
+                            data-toggle="modal" data-target="#exampleModal"
+                          >
+                           
+                            <i className="fas fa-share-alt"></i> Share
+                          </button>
+                         </>
+                      </div>
+                    </div>
+                  )}
+                  </div>
+                </div>
+                {/* <Modal/> */}
+              </div>
+            ))
+          )}
+        </div> 
+      }
 
       {loading && (
         <div className="d-flex flex-row justify-content-center mt-5">
           <Spinner />
         </div>
       )}
-      {!loading && files.length === 0 && (
+      {!loading && files.length === 0 && dirs.length === 0 && (
         <p className="text-center text-muted my-5">Start to share files!</p>
       )}
     </div>

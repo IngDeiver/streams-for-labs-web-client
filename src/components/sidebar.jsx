@@ -7,7 +7,7 @@ const Sidebar = () => {
     <section className="bg-light shadow-sm border">
           <div className="sidebar d-flex flex-column">
           <NavLink exact to="/" className="p-2 border">
-          <i className="far fa-folder-open"></i> Files
+          <i className="far fa-folder-open"></i> Home
           </NavLink>
           <NavLink exact to="/photos" className="p-2 border">
           <i className="fas fa-images"></i> Photos

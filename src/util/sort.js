@@ -1,6 +1,6 @@
 export const onSort = async (typeSort, files) => {
     const filesToSort = files;
-
+    console.log("Sotr__>", files);
     if(typeSort === "name"){
       await filesToSort.sort(function (a, b) {
         var nameA = a.name.toUpperCase(); // ignore upper and lowercase

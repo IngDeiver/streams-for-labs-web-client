@@ -66,6 +66,7 @@ const Photos = ({ showMessage }) => {
 
   function onDownloadPhotos() {
     setExistRequest(true);
+    showMessage("Download started")
     downloadPhoto(currentImage._id)
       .then((res) => {
         const blob = res.data;

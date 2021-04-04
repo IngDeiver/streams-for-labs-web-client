@@ -70,17 +70,17 @@ export const Modal =({showModal, setShowModal}) => {
     return (
         <>
      
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Compartir</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<div className="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog" role="document">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title" id="exampleModalLabel">Compartir</h5>
+        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
 
-      <div class="modal-body">
+      <div className="modal-body">
 
       
 
@@ -88,34 +88,34 @@ export const Modal =({showModal, setShowModal}) => {
         
         
       <label for="exampleInputEmail1">Usuarios a compartir</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa el nombre"></input>
+    <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa el nombre"></input>
     
-    <ul class="list-group pmd-list pmd-modal-list pmd-list-avatar">
-               <li class="list-group-item d-flex flex-row">
-                    <a href="javascript:void(0);" class="pmd-avatar-list-img"> 
-                        <img alt="avatar-img" data-src="holder.js/40x40" class="img-fluid" src="https://p.kindpng.com/picc/s/78-785827_user-profile-avatar-login-account-male-user-icon.png" data-holder-rendered="true"/>
+    <ul className="list-group pmd-list pmd-modal-list pmd-list-avatar">
+               <li className="list-group-item d-flex flex-row">
+                    <a href="javascript:void(0);" className="pmd-avatar-list-img"> 
+                        <img alt="avatar-img" data-src="holder.js/40x40" className="img-fluid" src="https://p.kindpng.com/picc/s/78-785827_user-profile-avatar-login-account-male-user-icon.png" data-holder-rendered="true"/>
                     </a>
-                    <div class="media-body">
-                        <h3 class="pmd-list-title">Alex J. Windham</h3>
-                        <p class="pmd-list-subtitle">Front End Developer</p> 
+                    <div className="media-body">
+                        <h3 className="pmd-list-title">Alex J. Windham</h3>
+                        <p className="pmd-list-subtitle">Front End Developer</p> 
                     </div>
-                    <div class="custom-control custom-checkbox pmd-checkbox">
-                        <input class="custom-control-input" type="checkbox" value="" id="defaultCheck1" checked/>
-                        <label class="custom-control-label" for="defaultCheck1">
+                    <div className="custom-control custom-checkbox pmd-checkbox">
+                        <input className="custom-control-input" type="checkbox" value="" id="defaultCheck1" checked/>
+                        <label className="custom-control-label" for="defaultCheck1">
                         </label>
                     </div>
 				</li>
-				<li class="list-group-item d-flex flex-row">
-                    <a href="javascript:void(0);" class="pmd-avatar-list-img"> 
-                        <img alt="avatar-img" data-src="holder.js/40x40" class="img-fluid" src="http://propeller.in/components/list/img/40x40.png" data-holder-rendered="true"/>
+				<li className="list-group-item d-flex flex-row">
+                    <a href="javascript:void(0);" className="pmd-avatar-list-img"> 
+                        <img alt="avatar-img" data-src="holder.js/40x40" className="img-fluid" src="http://propeller.in/components/list/img/40x40.png" data-holder-rendered="true"/>
                     </a>
-                    <div class="media-body">
-                        <h3 class="pmd-list-title">Kevin M. Stoneman</h3>
-                        <p class="pmd-list-subtitle">Front End Developer</p> 
+                    <div className="media-body">
+                        <h3 className="pmd-list-title">Kevin M. Stoneman</h3>
+                        <p className="pmd-list-subtitle">Front End Developer</p> 
                     </div>
-                    <div class="custom-control custom-checkbox pmd-checkbox">
-                        <input class="custom-control-input" type="checkbox" value="" id="defaultCheck2"/>
-                        <label class="custom-control-label" for="defaultCheck2">
+                    <div className="custom-control custom-checkbox pmd-checkbox">
+                        <input className="custom-control-input" type="checkbox" value="" id="defaultCheck2"/>
+                        <label className="custom-control-label" for="defaultCheck2">
                         </label>
                     </div>
                 </li>	
@@ -129,9 +129,9 @@ export const Modal =({showModal, setShowModal}) => {
    
       </div>
       
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary">Compartir</button>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" className="btn btn-primary">Compartir</button>
       </div>
     </div>
   </div>
