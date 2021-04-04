@@ -30,12 +30,10 @@ const Photos = ({ showMessage }) => {
 
   const onChangeSort = async (e) => {
     const typeSort = e.target.value;
-    const photosSorted = await onSort(typeSort, [...images])
-    setImages(photosSorted)
+    const photosSorted = await onSort(typeSort, [...images]);
+    setImages(photosSorted);
     setCurrentImage(photosSorted[0]);
   };
-
-
 
   function getPhotos() {
     setExistRequest(true);
@@ -66,7 +64,7 @@ const Photos = ({ showMessage }) => {
 
   function onDownloadPhotos() {
     setExistRequest(true);
-    showMessage("Download started")
+    showMessage("Download started");
     downloadPhoto(currentImage._id)
       .then((res) => {
         const blob = res.data;
@@ -102,17 +100,22 @@ const Photos = ({ showMessage }) => {
   return (
     <div>
       {images.length !== 0 && (
-        <div className="d-flex flex-row mb-2 mt-3 justify-content-start ml-1">
-          <select
-            style={{ width: "20%" }}
-            className="custom-select custom-select-sm"
-            onChange={onChangeSort}
-          >
-            <option selected>Select a sort</option>
-            <option value="date">By date</option>
-            <option value="name">By name</option>
-          </select>
-        </div>
+        <>
+          <div className="d-flex flex-row mb-2 mt-3 justify-content-start ">
+            <select
+              style={{ width: "20%" }}
+              className="custom-select custom-select-sm"
+              onChange={onChangeSort}
+            >
+              <option selected>Select a sort</option>
+              <option value="date">By date</option>
+              <option value="name">By name</option>
+            </select>
+          </div>
+          <div className="d-flex justify-content-center">
+            <h4 className="ml-2 text-muted">{currentImage?.name?.toUpperCase()}</h4>
+          </div>
+        </>
       )}
       <div style={{ position: "relative" }}>
         {loadingPhotos && (
@@ -120,7 +123,7 @@ const Photos = ({ showMessage }) => {
             <Spinner />
           </div>
         )}
-        {images.length > 0  ? (
+        {images.length > 0 ? (
           <ImageGallery
             items={images.map((img) => {
               const path = `${process.env.REACT_APP_GATEWAY_SERVICE_BASE_URL}/api/photo/download/${img._id}`;
@@ -145,15 +148,7 @@ const Photos = ({ showMessage }) => {
             )}
           </>
         )}
-        <div className="d-flex justify-content-center">
-          <h4
-          // Imprimimos el nombre de la imagen
-            style={{ position: "absolute", top: 10 }}
-            className="text-bold text-center"
-          >
-            {currentImage?.name?.toUpperCase()}
-          </h4>
-        </div>
+
         {images.length !== 0 && (
           <div className="d-flex justify-content-center">
             <div style={{ position: "absolute", bottom: 10 }}>
@@ -162,7 +157,7 @@ const Photos = ({ showMessage }) => {
                 // Hacemos un boton para remover la imagen
                 type="button"
                 disabled={existRequest}
-                className="btn btn-outline-danger btn-sm mx-2"
+                className="btn btn-danger btn-sm mx-2"
               >
                 Remove
               </button>
@@ -171,7 +166,7 @@ const Photos = ({ showMessage }) => {
                 onClick={onDownloadPhotos}
                 // Hacemos un boton para descargar la imagen
                 type="button"
-                className="btn btn-outline-info btn-sm"
+                className="btn btn-info btn-sm"
               >
                 Download
               </button>
@@ -179,7 +174,7 @@ const Photos = ({ showMessage }) => {
                 disabled={existRequest}
                 // Hacemos un boton para compartir la imagen
                 type="button"
-                className="btn btn-outline-success btn-sm ml-2"
+                className="btn btn-success btn-sm ml-2"
               >
                 Share
               </button>
