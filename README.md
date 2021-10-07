@@ -5,7 +5,7 @@
   </a>
 </p>
 
-Streams for lab es un proyecto integrador de la facultad de ing. de ssitemas, propuesto por la facultad para desarrollar durante el semestre, e cual consta de lo siguiente:
+Streams for lab es un proyecto integrador de la facultad de ing. de sitemas, propuesto por la facultad para desarrollar durante el semestre, e cual consta de lo siguiente:
 Como iniciativa en la solución al manejo de recursos compartidos en pequeñas empresas o el hogar se propone desarrollar un sistema distribuido de administración de recursos compartidos como se muestra en la Figura 1. Entre ellos archivos, fotos y video desde una interfaz unificada. Se propone que el sistema permita sincronizar datos de celular o directorios de un equipo de escritorio, en una copia de seguridad. También ofrezca la capacidad de compartir archivos. Si los archivos son imágenes o video el sistema ofrecería la capacidad de organizar y presentar las imágenes. Por ejemplo, la aplicación “Fotos” de Google. Además, el sistema tendría un servidor streaming para compartir y reproducir video.
 
 # Secciones de la aplicación web
