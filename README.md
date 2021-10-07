@@ -11,6 +11,7 @@ Como iniciativa en la solución al manejo de recursos compartidos en pequeñas e
 # Secciones de la aplicación web
 ## Login
 ![Admin Login](https://firebasestorage.googleapis.com/v0/b/files-service.appspot.com/o/images%2FLogin%20admin.png?alt=media&token=06f93f06-91c6-4171-84f2-fcbfcbcaa3e1)
+
 ![Login](https://firebasestorage.googleapis.com/v0/b/files-service.appspot.com/o/images%2Flogin.png?alt=media&token=9a4a1c88-e001-4d15-9fab-e8ac6d8d1bdd)
 ## Files
 ![Files](https://firebasestorage.googleapis.com/v0/b/files-service.appspot.com/o/images%2Ffiles.png?alt=media&token=ce3fda2c-2ec8-48d7-84b4-f91daab9604d)
